@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using System;
@@ -9,6 +10,10 @@ namespace avaloniadefaultapp
 {
     public partial class MainWindow : Window
     {
+        private WriteableBitmap scaledBitmap;
+        private int[,] matrix;
+        private int scaleFactor = 10;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,7 +39,7 @@ namespace avaloniadefaultapp
                         Console.WriteLine($"Height: {height}, Width: {width}"); // Debug output
 
                         // Initialize the 2D array (matrix)
-                        int[,] matrix = new int[height, width];
+                        matrix = new int[height, width];
 
                         // Process the second line as a matrix grid
                         string secondLine = lines[1];
@@ -76,10 +81,9 @@ namespace avaloniadefaultapp
                         }
 
                         // Create a scaled WriteableBitmap
-                        int scaleFactor = 10;
                         int scaledWidth = width * scaleFactor;
                         int scaledHeight = height * scaleFactor;
-                        var scaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+                        scaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
 
                         using (var fb = scaledBitmap.Lock())
                         {
@@ -121,6 +125,41 @@ namespace avaloniadefaultapp
             else
             {
                 Console.WriteLine("File not found!"); // Debug output
+            }
+        }
+
+        private void ImageControl_PointerPressed(object sender, PointerPressedEventArgs e)
+        {
+            var point = e.GetPosition(imageControl);
+            int x = (int)(point.X / scaleFactor);
+            int y = (int)(point.Y / scaleFactor);
+
+            if (x >= 0 && x < matrix.GetLength(1) && y >= 0 && y < matrix.GetLength(0))
+            {
+                matrix[y, x] = matrix[y, x] == 1 ? 0 : 1; // Toggle the pixel color
+
+                // Update the original bitmap
+                using (var fb = scaledBitmap.Lock())
+                {
+                    unsafe
+                    {
+                        var buffer = (uint*)fb.Address;
+                        uint color = matrix[y, x] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+
+                        // Set the color for the scaled pixel size
+                        for (int py = 0; py < scaleFactor; py++)
+                        {
+                            for (int px = 0; px < scaleFactor; px++)
+                            {
+                                int scaledIndex = (y * scaleFactor + py) * scaledBitmap.PixelSize.Width + (x * scaleFactor + px);
+                                buffer[scaledIndex] = color;
+                            }
+                        }
+                    }
+                }
+
+                // Refresh the image control
+                imageControl.InvalidateVisual();
             }
         }
     }
