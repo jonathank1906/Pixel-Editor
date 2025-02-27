@@ -14,7 +14,7 @@ namespace avaloniadefaultapp
     {
         private WriteableBitmap scaledBitmap;
         private int[,] matrix;
-        private int scaleFactor = 10;
+        private int scaleFactor = 25;
 
         public MainWindow()
         {
@@ -22,8 +22,27 @@ namespace avaloniadefaultapp
             ShowWritableBitmap();
         }
 
+        private unsafe void DrawBorder(uint* buffer, int scaledWidth, int scaledHeight, uint borderColor, int borderThickness)
+        {
+            for (int y = 0; y < scaledHeight; y++)
+            {
+                for (int x = 0; x < scaledWidth; x++)
+                {
+                    if (x < borderThickness || x >= scaledWidth - borderThickness || y < borderThickness || y >= scaledHeight - borderThickness)
+                    {
+                        int borderIndex = y * scaledWidth + x;
+                        buffer[borderIndex] = borderColor;
+                    }
+                }
+            }
+        }
+
         private void ShowWritableBitmap(string textFile = "smile.b2img.txt")
         {
+            // Define border color and thickness
+            uint borderColor = 0xFF000000; // Black color
+            int borderThickness = 2;
+
             if (File.Exists(textFile))
             {
                 string[] lines = File.ReadAllLines(textFile); // Read a text file line by line.
@@ -110,6 +129,9 @@ namespace avaloniadefaultapp
                                         }
                                     }
                                 }
+
+                                // Draw the border
+                                DrawBorder(buffer, scaledWidth, scaledHeight, borderColor, borderThickness);
                             }
                         }
 
@@ -202,6 +224,9 @@ namespace avaloniadefaultapp
                                 buffer[scaledIndex] = color;
                             }
                         }
+
+                        // Redraw the border
+                        DrawBorder(buffer, scaledBitmap.PixelSize.Width, scaledBitmap.PixelSize.Height, 0xFF000000, 2);
                     }
                 }
 
