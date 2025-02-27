@@ -242,5 +242,96 @@ namespace avaloniadefaultapp
                 imageControl.InvalidateVisual();
             }
         }
+
+        private void FlipHorizontalButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            FlipImageVertically();
+        }
+
+        private void FlipVerticalButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            FlipImageHorizontally();
+        }
+
+        private void FlipImageVertically()
+        {
+            int height = matrix.GetLength(0);
+            int width = matrix.GetLength(1);
+            int[,] flippedMatrix = new int[height, width];
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    flippedMatrix[i, j] = matrix[height - 1 - i, j];
+                }
+            }
+
+            matrix = flippedMatrix;
+            UpdateBitmap();
+        }
+
+        private void FlipImageHorizontally()
+        {
+            int height = matrix.GetLength(0);
+            int width = matrix.GetLength(1);
+            int[,] flippedMatrix = new int[height, width];
+
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    flippedMatrix[i, j] = matrix[i, width - 1 - j];
+                }
+            }
+
+            matrix = flippedMatrix;
+            UpdateBitmap();
+        }
+
+        private void UpdateBitmap()
+        {
+            int height = matrix.GetLength(0);
+            int width = matrix.GetLength(1);
+
+            // Create a scaled WriteableBitmap
+            int scaledWidth = width * scaleFactor;
+            int scaledHeight = height * scaleFactor;
+            scaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+
+            using (var fb = scaledBitmap.Lock())
+            {
+                unsafe
+                {
+                    var buffer = (uint*)fb.Address;
+
+                    for (int i = 0; i < height; i++)
+                    {
+                        for (int j = 0; j < width; j++)
+                        {
+                            int index = i * width + j;
+                            uint color = matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+
+                            // Set the color for the scaled pixel size
+                            for (int y = 0; y < scaleFactor; y++)
+                            {
+                                for (int x = 0; x < scaleFactor; x++)
+                                {
+                                    int scaledIndex = (i * scaleFactor + y) * scaledWidth + (j * scaleFactor + x);
+                                    buffer[scaledIndex] = color;
+                                }
+                            }
+                        }
+                    }
+
+                    // Draw the border
+                    DrawBorder(buffer, scaledWidth, scaledHeight, 0xFF000000, 2);
+                }
+            }
+
+            // Assign the scaledBitmap to the image control
+            imageControl.Source = scaledBitmap;
+            Console.WriteLine("Bitmap updated and assigned to image control."); // Debug output
+        }
     }
 }
