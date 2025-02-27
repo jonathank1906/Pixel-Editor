@@ -138,6 +138,9 @@ namespace avaloniadefaultapp
                         // Assign the scaledBitmap to the image control
                         imageControl.Source = scaledBitmap;
                         Console.WriteLine("Bitmap assigned to image control."); // Debug output
+
+                        // Update the dimensions text block
+                        UpdateImageDimensions(width, height);
                     }
                 }
                 else
@@ -149,6 +152,11 @@ namespace avaloniadefaultapp
             {
                 Console.WriteLine("File not found!"); // Debug output
             }
+        }
+
+        private void UpdateImageDimensions(int width, int height)
+        {
+            imageDimensionsTextBlock.Text = $"Size: {height}x{width}";
         }
 
         private async void LoadButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)

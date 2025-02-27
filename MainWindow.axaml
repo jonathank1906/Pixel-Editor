@@ -3,6 +3,9 @@
         x:Class="avaloniadefaultapp.MainWindow"
         Title="Pixel Editor" Width="400" Height="400">
     <StackPanel Orientation="Vertical">
+        <!-- TextBlock to display image dimensions -->
+        <TextBlock Name="imageDimensionsTextBlock" HorizontalAlignment="Center" Margin="5"/>
+        
         <!-- Image control to show the WriteableBitmap -->
         <Image Name="imageControl" Width="300" Height="300" Stretch="None" PointerPressed="ImageControl_PointerPressed" />
         
