@@ -4,7 +4,9 @@ using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace avaloniadefaultapp
 {
@@ -20,9 +22,8 @@ namespace avaloniadefaultapp
             ShowWritableBitmap();
         }
 
-        private void ShowWritableBitmap()
+        private void ShowWritableBitmap(string textFile = "smile.b2img.txt")
         {
-            string textFile = "smile.b2img.txt"; // File path
             if (File.Exists(textFile))
             {
                 string[] lines = File.ReadAllLines(textFile); // Read a text file line by line.
@@ -125,6 +126,52 @@ namespace avaloniadefaultapp
             else
             {
                 Console.WriteLine("File not found!"); // Debug output
+            }
+        }
+
+        private async void LoadButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                AllowMultiple = false,
+                Filters = new List<FileDialogFilter>
+                {
+                    new FileDialogFilter { Name = "Text Files", Extensions = { "txt" } }
+                }
+            };
+
+            var result = await openFileDialog.ShowAsync(this);
+            if (result != null && result.Length > 0)
+            {
+                ShowWritableBitmap(result[0]);
+            }
+        }
+
+        private async void SaveButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                DefaultExtension = "txt",
+                Filters = new List<FileDialogFilter>
+                {
+                    new FileDialogFilter { Name = "Text Files", Extensions = { "txt" } }
+                }
+            };
+
+            var result = await saveFileDialog.ShowAsync(this);
+            if (result != null)
+            {
+                using (var writer = new StreamWriter(result))
+                {
+                    writer.WriteLine($"{matrix.GetLength(0)} {matrix.GetLength(1)}");
+                    for (int i = 0; i < matrix.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < matrix.GetLength(1); j++)
+                        {
+                            writer.Write(matrix[i, j] == 1 ? '1' : '0');
+                        }
+                    }
+                }
             }
         }
 

@@ -3,6 +3,10 @@
         x:Class="avaloniadefaultapp.MainWindow"
         Title="Pixel Editor" Width="400" Height="400">
     <StackPanel>
+        <!-- Load and Save buttons -->
+        <Button Name="LoadButton" Content="Load" Click="LoadButton_Click"/>
+        <Button Name="SaveButton" Content="Save" Click="SaveButton_Click"/>
+        
         <!-- Image control to show the WriteableBitmap -->
         <Image Name="imageControl" Width="300" Height="300" Stretch="None" PointerPressed="ImageControl_PointerPressed" />
     </StackPanel>
