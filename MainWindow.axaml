@@ -1,7 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="avaloniadefaultapp.MainWindow"
-        Title="Pixel Editor" Width="400" Height="450">
+        Title="Pixel Editor" Width="500" Height="450">
     <StackPanel Orientation="Vertical">
         <!-- TabControl to hold multiple tabs -->
         <TabControl Name="tabControl" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

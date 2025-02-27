@@ -22,69 +22,73 @@ namespace avaloniadefaultapp
         }
 
         private void InitializeDefaultTab(string fileName)
-{
-    var context = new TabContext();
-
-    imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
-    {
-        Name = "imageDimensionsTextBlock",
-        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-        Margin = new Thickness(5)
-    };
-
-    var imageControl = new Image
-    {
-        Width = 300,
-        Height = 300,
-        Stretch = Avalonia.Media.Stretch.None,
-        Tag = context
-    };
-    imageControl.PointerPressed += ImageControl_PointerPressed;
-    context.ImageControl = imageControl;
-
-    var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
-    loadButton.Click += LoadButton_Click;
-
-    var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
-    saveButton.Click += SaveButton_Click;
-
-    var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
-    flipVerticalButton.Click += FlipVerticalButton_Click;
-
-    var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
-    flipHorizontalButton.Click += FlipHorizontalButton_Click;
-
-    var tabItem = new TabItem
-    {
-        Header = Path.GetFileName(fileName),
-        Content = new StackPanel
         {
-            Orientation = Avalonia.Layout.Orientation.Vertical,
-            Children =
+            var context = new TabContext { FilePath = fileName };
+
+            imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
             {
-                imageDimensionsTextBlock, // Use the field here
-                imageControl,
-                new StackPanel
+                Name = "imageDimensionsTextBlock",
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                Margin = new Thickness(5)
+            };
+
+            var imageControl = new Image
+            {
+                Width = 300,
+                Height = 300,
+                Stretch = Avalonia.Media.Stretch.None,
+                Tag = context
+            };
+            imageControl.PointerPressed += ImageControl_PointerPressed;
+            context.ImageControl = imageControl;
+
+            var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
+            loadButton.Click += LoadButton_Click;
+
+            var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
+            saveButton.Click += SaveButtonAs_Click;
+
+            var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
+            saveButtonOverwrite.Click += SaveButton_Click;
+
+            var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
+            flipVerticalButton.Click += FlipVerticalButton_Click;
+
+            var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
+            flipHorizontalButton.Click += FlipHorizontalButton_Click;
+
+            var tabItem = new TabItem
+            {
+                Header = Path.GetFileName(fileName),
+                Content = new StackPanel
                 {
-                    Orientation = Avalonia.Layout.Orientation.Horizontal,
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    Orientation = Avalonia.Layout.Orientation.Vertical,
                     Children =
                     {
-                        loadButton,
-                        saveButton,
-                        flipVerticalButton,
-                        flipHorizontalButton
+                        imageDimensionsTextBlock, // Use the field here
+                        imageControl,
+                        new StackPanel
+                        {
+                            Orientation = Avalonia.Layout.Orientation.Horizontal,
+                            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                            Children =
+                            {
+                                loadButton,
+                                saveButton,
+                                saveButtonOverwrite,
+                                flipVerticalButton,
+                                flipHorizontalButton
+                            }
+                        }
                     }
                 }
-            }
-        }
-    };
-    tabControl.Items.Clear();
-    tabControl.Items.Add(tabItem);
-    tabControl.SelectedItem = tabItem;
+            };
+            tabControl.Items.Clear();
+            tabControl.Items.Add(tabItem);
+            tabControl.SelectedItem = tabItem;
 
-    ShowWritableBitmap(fileName, imageControl, context);
-}
+            ShowWritableBitmap(fileName, imageControl, context);
+        }
 
         private unsafe void DrawBorder(uint* buffer, int scaledWidth, int scaledHeight, uint borderColor, int borderThickness)
         {
@@ -241,7 +245,7 @@ namespace avaloniadefaultapp
             }
         }
 
-        private async void SaveButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private async void SaveButtonAs_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog
             {
@@ -266,6 +270,34 @@ namespace avaloniadefaultapp
                             writer.Write(context.Matrix[i, j] == 1 ? '1' : '0');
                         }
                     }
+                }
+            }
+        }
+
+        private async void SaveButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var context = (TabContext)((Button)sender).Tag;
+            var filePath = context.FilePath;
+
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                using (var writer = new StreamWriter(filePath))
+                {
+                    writer.WriteLine($"{context.Matrix.GetLength(0)} {context.Matrix.GetLength(1)}");
+                    for (int i = 0; i < context.Matrix.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < context.Matrix.GetLength(1); j++)
+                        {
+                            writer.Write(context.Matrix[i, j] == 1 ? '1' : '0');
+                        }
+                    }
+                }
+
+                // Remove the asterisk from the tab header
+                var tabItem = tabControl.SelectedItem as TabItem;
+                if (tabItem != null && tabItem.Header.ToString().EndsWith("*"))
+                {
+                    tabItem.Header = tabItem.Header.ToString().TrimEnd('*');
                 }
             }
         }
@@ -307,6 +339,13 @@ namespace avaloniadefaultapp
 
                 // Refresh the image control
                 imageControl.InvalidateVisual();
+
+                // Add an asterisk to the tab header
+                var tabItem = tabControl.SelectedItem as TabItem;
+                if (tabItem != null && !tabItem.Header.ToString().EndsWith("*"))
+                {
+                    tabItem.Header += "*";
+                }
             }
         }
 
@@ -405,7 +444,7 @@ namespace avaloniadefaultapp
 
         private void AddNewTab(string filePath)
         {
-            var context = new TabContext();
+            var context = new TabContext { FilePath = filePath };
 
             imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
             {
@@ -428,7 +467,10 @@ namespace avaloniadefaultapp
             loadButton.Click += LoadButton_Click;
 
             var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
-            saveButton.Click += SaveButton_Click;
+            saveButton.Click += SaveButtonAs_Click;
+
+            var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
+            saveButtonOverwrite.Click += SaveButton_Click;
 
             var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
             flipVerticalButton.Click += FlipVerticalButton_Click;
@@ -454,6 +496,7 @@ namespace avaloniadefaultapp
                             {
                                 loadButton,
                                 saveButton,
+                                saveButtonOverwrite,
                                 flipVerticalButton,
                                 flipHorizontalButton
                             }
@@ -467,11 +510,13 @@ namespace avaloniadefaultapp
 
             ShowWritableBitmap(filePath, imageControl, context);
         }
+
         private class TabContext
         {
             public int[,] Matrix { get; set; }
             public WriteableBitmap ScaledBitmap { get; set; }
             public Image ImageControl { get; set; }
+            public string FilePath { get; set; }
         }
     }
 }
