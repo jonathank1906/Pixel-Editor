@@ -64,3 +64,4 @@ C:\Users\jonat\Desktop\avaloniadefaultapp\obj\Debug\net9.0\refint\Avalonia\avalo
 C:\Users\jonat\Desktop\avaloniadefaultapp\obj\Debug\net9.0\avalonia.5C2F5720.Up2Date
 C:\Users\jonat\Desktop\avaloniadefaultapp\obj\Debug\net9.0\avaloniadefaultapp.genruntimeconfig.cache
 C:\Users\jonat\Desktop\avaloniadefaultapp\obj\Debug\net9.0\ref\avaloniadefaultapp.dll
+C:\Users\jonat\Desktop\avaloniadefaultapp\obj\Debug\net9.0\avaloniadefaultapp.sourcelink.json

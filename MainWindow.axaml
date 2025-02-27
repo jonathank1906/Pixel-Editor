@@ -4,6 +4,6 @@
         Title="Pixel Editor" Width="400" Height="400">
     <StackPanel>
         <!-- Image control to show the WriteableBitmap -->
-        <Image Name="imageControl" Width="300" Height="300" />
+        <Image Name="imageControl" Width="300" Height="300" Stretch="None" />
     </StackPanel>
 </Window>
