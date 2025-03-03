@@ -21,85 +21,74 @@ namespace avaloniadefaultapp
             InitializeDefaultTab("smile.b2img.txt");
         }
 
-private void InitializeDefaultTab(string fileName)
-{
-    var context = new TabContext { FilePath = fileName };
-
-    imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
-    {
-        Name = "imageDimensionsTextBlock",
-        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-        Margin = new Thickness(5)
-    };
-
-    var imageControl = new Image
-    {
-        Width = 300,
-        Height = 300,
-        Stretch = Avalonia.Media.Stretch.None,
-        Tag = context
-    };
-    imageControl.PointerPressed += ImageControl_PointerPressed;
-    context.ImageControl = imageControl;
-
-    var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
-    loadButton.Click += LoadButton_Click;
-
-    var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
-    saveButton.Click += SaveButtonAs_Click;
-
-    var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
-    saveButtonOverwrite.Click += SaveButton_Click;
-
-    var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
-    flipVerticalButton.Click += FlipVerticalButton_Click;
-
-    var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
-    flipHorizontalButton.Click += FlipHorizontalButton_Click;
-
-    var tabItem = new TabItem
-    {
-        Header = new TextBlock { Text = Path.GetFileName(fileName) },
-        Content = new StackPanel
+        private void InitializeDefaultTab(string fileName)
         {
-            Orientation = Avalonia.Layout.Orientation.Vertical,
-            Children =
+            var context = new TabContext { FilePath = fileName };
+
+            imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
             {
-                imageDimensionsTextBlock, // Use the field here
-                imageControl,
-                new StackPanel
+                Name = "imageDimensionsTextBlock",
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                Margin = new Thickness(5)
+            };
+
+            var imageControl = new Image
+            {
+                Width = 300,
+                Height = 300,
+                Stretch = Avalonia.Media.Stretch.None,
+                Tag = context
+            };
+            imageControl.PointerPressed += ImageControl_PointerPressed;
+            context.ImageControl = imageControl;
+
+            var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
+            loadButton.Click += LoadButton_Click;
+
+            var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
+            saveButton.Click += SaveButtonAs_Click;
+
+            var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
+            saveButtonOverwrite.Click += SaveButton_Click;
+
+            var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
+            flipVerticalButton.Click += FlipVerticalButton_Click;
+
+            var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
+            flipHorizontalButton.Click += FlipHorizontalButton_Click;
+
+            var tabItem = new TabItem
+            {
+                Header = Path.GetFileName(fileName),
+                Content = new StackPanel
                 {
-                    Orientation = Avalonia.Layout.Orientation.Horizontal,
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                    Orientation = Avalonia.Layout.Orientation.Vertical,
                     Children =
                     {
-                        loadButton,
-                        saveButton,
-                        saveButtonOverwrite,
-                        flipVerticalButton,
-                        flipHorizontalButton
+                        imageDimensionsTextBlock, // Use the field here
+                        imageControl,
+                        new StackPanel
+                        {
+                            Orientation = Avalonia.Layout.Orientation.Horizontal,
+                            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                            Children =
+                            {
+                                loadButton,
+                                saveButton,
+                                saveButtonOverwrite,
+                                flipVerticalButton,
+                                flipHorizontalButton
+                            }
+                        }
                     }
                 }
-            }
+            };
+            tabControl.Items.Clear();
+            tabControl.Items.Add(tabItem);
+            tabControl.SelectedItem = tabItem;
+
+            ShowWritableBitmap(fileName, imageControl, context);
         }
-    };
-    tabControl.Items.Clear();
-    tabControl.Items.Add(tabItem);
-    tabControl.SelectedItem = tabItem;
-
-    ShowWritableBitmap(fileName, imageControl, context);
-}
-
-private void CloseButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-{
-    var button = sender as Button;
-    var context = button.Tag as TabContext;
-    var tabItem = tabControl.Items.OfType<TabItem>().FirstOrDefault(t => t.Content == context.ImageControl.Parent);
-    if (tabItem != null)
-    {
-        tabControl.Items.Remove(tabItem);
-    }
-}
 
         private unsafe void DrawBorder(uint* buffer, int scaledWidth, int scaledHeight, uint borderColor, int borderThickness)
         {
@@ -116,165 +105,165 @@ private void CloseButton_Click(object sender, Avalonia.Interactivity.RoutedEvent
             }
         }
 
-private int AdjustScaleFactor(int height, int width)
-{
-    if (height >= 80 || width >= 80)
-    {
-        return 3;
-    }
-    if (height >= 70 || width >= 70)
-    {
-        return 4;
-    }
-    if (height >= 60 || width >= 60)
-    {
-        return 5;
-    }
-    if (height >= 50 || width >= 50)
-    {
-        return 6;
-    }
-    if (height >= 40 || width >= 40)
-    {
-        return 7;
-    }
-    else if (height >= 30 || width >= 30)
-    {
-        return 10;
-    }
-    else if (height >= 20 || width >= 20)
-    {
-        return 15;
-    }
-    else if (height >= 10 || width >= 10)
-    {
-        return 20;
-    }
-    else
-    {
-        return 25;
-    }
-}
-
-private void ShowWritableBitmap(string textFile, Image imageControl, TabContext context)
-{
-    // Define border color and thickness
-    uint borderColor = 0xFF000000; // Black color
-    int borderThickness = 2;
-
-    if (File.Exists(textFile))
-    {
-        string[] lines = File.ReadAllLines(textFile); // Read a text file line by line.
-        if (lines.Length > 1)
+        private int AdjustScaleFactor(int height, int width)
         {
-            // Process the first line
-            string firstLine = lines[0];
-            string[] numbers = firstLine.Split(' ');
-            if (numbers.Length == 2)
+            if (height >= 80 || width >= 80)
             {
-                int height = int.Parse(numbers[0]);
-                int width = int.Parse(numbers[1]);
+                return 3;
+            }
+            if (height >= 70 || width >= 70)
+            {
+                return 4;
+            }
+            if (height >= 60 || width >= 60)
+            {
+                return 5;
+            }
+            if (height >= 50 || width >= 50)
+            {
+                return 6;
+            }
+            if (height >= 40 || width >= 40)
+            {
+                return 7;
+            }
+            else if (height >= 30 || width >= 30)
+            {
+                return 10;
+            }
+            else if (height >= 20 || width >= 20)
+            {
+                return 15;
+            }
+            else if (height >= 10 || width >= 10)
+            {
+                return 20;
+            }
+            else
+            {
+                return 25;
+            }
+        }
 
-                // Adjust the scale factor based on the image dimensions
-                context.ScaleFactor = AdjustScaleFactor(height, width);
+        private void ShowWritableBitmap(string textFile, Image imageControl, TabContext context)
+        {
+            // Define border color and thickness
+            uint borderColor = 0xFF000000; // Black color
+            int borderThickness = 2;
 
-                Console.WriteLine($"Height: {height}, Width: {width}"); // Debug output
-
-                // Initialize the 2D array (matrix)
-                context.Matrix = new int[height, width];
-
-                // Process the second line as a matrix grid
-                string secondLine = lines[1];
-                for (int i = 0; i < height; i++)
+            if (File.Exists(textFile))
+            {
+                string[] lines = File.ReadAllLines(textFile); // Read a text file line by line.
+                if (lines.Length > 1)
                 {
-                    for (int j = 0; j < width; j++)
+                    // Process the first line
+                    string firstLine = lines[0];
+                    string[] numbers = firstLine.Split(' ');
+                    if (numbers.Length == 2)
                     {
-                        int index = i * width + j;
-                        if (index < secondLine.Length)
-                        {
-                            context.Matrix[i, j] = secondLine[index] == '1' ? 1 : 0;
-                        }
-                        else
-                        {
-                            context.Matrix[i, j] = 0; // Fill with 0 if index exceeds line length
-                        }
-                    }
-                }
+                        int height = int.Parse(numbers[0]);
+                        int width = int.Parse(numbers[1]);
 
-                // Create the original WriteableBitmap to display the image
-                var originalBitmap = new WriteableBitmap(new PixelSize(width, height), new Vector(96, 96), PixelFormat.Bgra8888);
+                        // Adjust the scale factor based on the image dimensions
+                        context.ScaleFactor = AdjustScaleFactor(height, width);
 
-                using (var fb = originalBitmap.Lock())
-                {
-                    unsafe
-                    {
-                        var buffer = (uint*)fb.Address;
+                        Console.WriteLine($"Height: {height}, Width: {width}"); // Debug output
 
+                        // Initialize the 2D array (matrix)
+                        context.Matrix = new int[height, width];
+
+                        // Process the second line as a matrix grid
+                        string secondLine = lines[1];
                         for (int i = 0; i < height; i++)
                         {
                             for (int j = 0; j < width; j++)
                             {
                                 int index = i * width + j;
-                                uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
-                                buffer[index] = color;
+                                if (index < secondLine.Length)
+                                {
+                                    context.Matrix[i, j] = secondLine[index] == '1' ? 1 : 0;
+                                }
+                                else
+                                {
+                                    context.Matrix[i, j] = 0; // Fill with 0 if index exceeds line length
+                                }
                             }
                         }
-                    }
-                }
 
-                // Create a scaled WriteableBitmap
-                int scaledWidth = width * context.ScaleFactor;
-                int scaledHeight = height * context.ScaleFactor;
-                context.ScaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+                        // Create the original WriteableBitmap to display the image
+                        var originalBitmap = new WriteableBitmap(new PixelSize(width, height), new Vector(96, 96), PixelFormat.Bgra8888);
 
-                using (var fb = context.ScaledBitmap.Lock())
-                {
-                    unsafe
-                    {
-                        var buffer = (uint*)fb.Address;
-
-                        for (int i = 0; i < height; i++)
+                        using (var fb = originalBitmap.Lock())
                         {
-                            for (int j = 0; j < width; j++)
+                            unsafe
                             {
-                                int index = i * width + j;
-                                uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+                                var buffer = (uint*)fb.Address;
 
-                                // Set the color for the scaled pixel size
-                                for (int y = 0; y < context.ScaleFactor; y++)
+                                for (int i = 0; i < height; i++)
                                 {
-                                    for (int x = 0; x < context.ScaleFactor; x++)
+                                    for (int j = 0; j < width; j++)
                                     {
-                                        int scaledIndex = (i * context.ScaleFactor + y) * scaledWidth + (j * context.ScaleFactor + x);
-                                        buffer[scaledIndex] = color;
+                                        int index = i * width + j;
+                                        uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+                                        buffer[index] = color;
                                     }
                                 }
                             }
                         }
 
-                        // Draw the border
-                        DrawBorder(buffer, scaledWidth, scaledHeight, borderColor, borderThickness);
+                        // Create a scaled WriteableBitmap
+                        int scaledWidth = width * context.ScaleFactor;
+                        int scaledHeight = height * context.ScaleFactor;
+                        context.ScaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+
+                        using (var fb = context.ScaledBitmap.Lock())
+                        {
+                            unsafe
+                            {
+                                var buffer = (uint*)fb.Address;
+
+                                for (int i = 0; i < height; i++)
+                                {
+                                    for (int j = 0; j < width; j++)
+                                    {
+                                        int index = i * width + j;
+                                        uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+
+                                        // Set the color for the scaled pixel size
+                                        for (int y = 0; y < context.ScaleFactor; y++)
+                                        {
+                                            for (int x = 0; x < context.ScaleFactor; x++)
+                                            {
+                                                int scaledIndex = (i * context.ScaleFactor + y) * scaledWidth + (j * context.ScaleFactor + x);
+                                                buffer[scaledIndex] = color;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Draw the border
+                                DrawBorder(buffer, scaledWidth, scaledHeight, borderColor, borderThickness);
+                            }
+                        }
+
+                        // Assign the scaledBitmap to the image control
+                        imageControl.Source = context.ScaledBitmap;
+                        Console.WriteLine("Bitmap assigned to image control."); // Debug output
+
+                        // Update the dimensions text block
+                        UpdateImageDimensions(width, height);
                     }
                 }
-
-                // Assign the scaledBitmap to the image control
-                imageControl.Source = context.ScaledBitmap;
-                Console.WriteLine("Bitmap assigned to image control."); // Debug output
-
-                // Update the dimensions text block
-                UpdateImageDimensions(width, height);
+                else
+                {
+                    Console.WriteLine("File does not contain enough lines."); // Debug output
+                }
+            }
+            else
+            {
+                Console.WriteLine("File not found!"); // Debug output
             }
         }
-        else
-        {
-            Console.WriteLine("File does not contain enough lines."); // Debug output
-        }
-    }
-    else
-    {
-        Console.WriteLine("File not found!"); // Debug output
-    }
-}
 
         private void UpdateImageDimensions(int width, int height)
         {
@@ -305,9 +294,9 @@ private void ShowWritableBitmap(string textFile, Image imageControl, TabContext 
             {
                 DefaultExtension = "txt",
                 Filters = new List<FileDialogFilter>
-                {
-                    new FileDialogFilter { Name = "Text Files", Extensions = { "txt" } }
-                }
+            {
+                new FileDialogFilter { Name = "Text Files", Extensions = { "txt" } }
+            }
             };
 
             var result = await saveFileDialog.ShowAsync(this);
@@ -325,9 +314,18 @@ private void ShowWritableBitmap(string textFile, Image imageControl, TabContext 
                         }
                     }
                 }
+
+                // Update the context file path
+                context.FilePath = result;
+
+                // Update the tab header
+                var tabItem = tabControl.SelectedItem as TabItem;
+                if (tabItem != null)
+                {
+                    tabItem.Header = Path.GetFileName(result);
+                }
             }
         }
-
         private async void SaveButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var context = (TabContext)((Button)sender).Tag;
@@ -356,52 +354,52 @@ private void ShowWritableBitmap(string textFile, Image imageControl, TabContext 
             }
         }
 
-       private void ImageControl_PointerPressed(object sender, PointerPressedEventArgs e)
-{
-    var imageControl = sender as Image;
-    var context = (TabContext)imageControl.Tag;
-    var point = e.GetPosition(imageControl);
-    int x = (int)(point.X / context.ScaleFactor);
-    int y = (int)(point.Y / context.ScaleFactor);
-
-    if (x >= 0 && x < context.Matrix.GetLength(1) && y >= 0 && y < context.Matrix.GetLength(0))
-    {
-        context.Matrix[y, x] = context.Matrix[y, x] == 1 ? 0 : 1; // Toggle the pixel color
-
-        // Update the original bitmap
-        using (var fb = context.ScaledBitmap.Lock())
+        private void ImageControl_PointerPressed(object sender, PointerPressedEventArgs e)
         {
-            unsafe
-            {
-                var buffer = (uint*)fb.Address;
-                uint color = context.Matrix[y, x] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+            var imageControl = sender as Image;
+            var context = (TabContext)imageControl.Tag;
+            var point = e.GetPosition(imageControl);
+            int x = (int)(point.X / context.ScaleFactor);
+            int y = (int)(point.Y / context.ScaleFactor);
 
-                // Set the color for the scaled pixel size
-                for (int py = 0; py < context.ScaleFactor; py++)
+            if (x >= 0 && x < context.Matrix.GetLength(1) && y >= 0 && y < context.Matrix.GetLength(0))
+            {
+                context.Matrix[y, x] = context.Matrix[y, x] == 1 ? 0 : 1; // Toggle the pixel color
+
+                // Update the original bitmap
+                using (var fb = context.ScaledBitmap.Lock())
                 {
-                    for (int px = 0; px < context.ScaleFactor; px++)
+                    unsafe
                     {
-                        int scaledIndex = (y * context.ScaleFactor + py) * context.ScaledBitmap.PixelSize.Width + (x * context.ScaleFactor + px);
-                        buffer[scaledIndex] = color;
+                        var buffer = (uint*)fb.Address;
+                        uint color = context.Matrix[y, x] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+
+                        // Set the color for the scaled pixel size
+                        for (int py = 0; py < context.ScaleFactor; py++)
+                        {
+                            for (int px = 0; px < context.ScaleFactor; px++)
+                            {
+                                int scaledIndex = (y * context.ScaleFactor + py) * context.ScaledBitmap.PixelSize.Width + (x * context.ScaleFactor + px);
+                                buffer[scaledIndex] = color;
+                            }
+                        }
+
+                        // Redraw the border
+                        DrawBorder(buffer, context.ScaledBitmap.PixelSize.Width, context.ScaledBitmap.PixelSize.Height, 0xFF000000, 2);
                     }
                 }
 
-                // Redraw the border
-                DrawBorder(buffer, context.ScaledBitmap.PixelSize.Width, context.ScaledBitmap.PixelSize.Height, 0xFF000000, 2);
+                // Refresh the image control
+                imageControl.InvalidateVisual();
+
+                // Add an asterisk to the tab header
+                var tabItem = tabControl.SelectedItem as TabItem;
+                if (tabItem != null && !tabItem.Header.ToString().EndsWith("*"))
+                {
+                    tabItem.Header += "*";
+                }
             }
         }
-
-        // Refresh the image control
-        imageControl.InvalidateVisual();
-
-        // Add an asterisk to the tab header
-        var tabItem = tabControl.SelectedItem as TabItem;
-        if (tabItem != null && !tabItem.Header.ToString().EndsWith("*"))
-        {
-            tabItem.Header += "*";
-        }
-    }
-}
 
         private void FlipHorizontalButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
@@ -452,151 +450,126 @@ private void ShowWritableBitmap(string textFile, Image imageControl, TabContext 
         }
 
         private void UpdateBitmap(TabContext context)
-{
-    int height = context.Matrix.GetLength(0);
-    int width = context.Matrix.GetLength(1);
-
-    // Create a scaled WriteableBitmap
-    int scaledWidth = width * context.ScaleFactor;
-    int scaledHeight = height * context.ScaleFactor;
-    context.ScaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
-
-    using (var fb = context.ScaledBitmap.Lock())
-    {
-        unsafe
         {
-            var buffer = (uint*)fb.Address;
+            int height = context.Matrix.GetLength(0);
+            int width = context.Matrix.GetLength(1);
 
-            for (int i = 0; i < height; i++)
+            // Create a scaled WriteableBitmap
+            int scaledWidth = width * context.ScaleFactor;
+            int scaledHeight = height * context.ScaleFactor;
+            context.ScaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+
+            using (var fb = context.ScaledBitmap.Lock())
             {
-                for (int j = 0; j < width; j++)
+                unsafe
                 {
-                    int index = i * width + j;
-                    uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+                    var buffer = (uint*)fb.Address;
 
-                    // Set the color for the scaled pixel size
-                    for (int y = 0; y < context.ScaleFactor; y++)
+                    for (int i = 0; i < height; i++)
                     {
-                        for (int x = 0; x < context.ScaleFactor; x++)
+                        for (int j = 0; j < width; j++)
                         {
-                            int scaledIndex = (i * context.ScaleFactor + y) * scaledWidth + (j * context.ScaleFactor + x);
-                            buffer[scaledIndex] = color;
+                            int index = i * width + j;
+                            uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
+
+                            // Set the color for the scaled pixel size
+                            for (int y = 0; y < context.ScaleFactor; y++)
+                            {
+                                for (int x = 0; x < context.ScaleFactor; x++)
+                                {
+                                    int scaledIndex = (i * context.ScaleFactor + y) * scaledWidth + (j * context.ScaleFactor + x);
+                                    buffer[scaledIndex] = color;
+                                }
+                            }
+                        }
+                    }
+
+                    // Draw the border
+                    DrawBorder(buffer, scaledWidth, scaledHeight, 0xFF000000, 2);
+                }
+            }
+
+            // Assign the scaledBitmap to the image control
+            context.ImageControl.Source = context.ScaledBitmap;
+            Console.WriteLine("Bitmap updated and assigned to image control."); // Debug output
+        }
+
+        private void AddNewTab(string filePath)
+        {
+            var context = new TabContext { FilePath = filePath };
+
+            imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
+            {
+                Name = "imageDimensionsTextBlock",
+                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                Margin = new Thickness(5)
+            };
+
+            var imageControl = new Image
+            {
+                Width = 300,
+                Height = 300,
+                Stretch = Avalonia.Media.Stretch.None,
+                Tag = context
+            };
+            imageControl.PointerPressed += ImageControl_PointerPressed;
+            context.ImageControl = imageControl;
+
+            var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
+            loadButton.Click += LoadButton_Click;
+
+            var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
+            saveButton.Click += SaveButtonAs_Click;
+
+            var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
+            saveButtonOverwrite.Click += SaveButton_Click;
+
+            var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
+            flipVerticalButton.Click += FlipVerticalButton_Click;
+
+            var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
+            flipHorizontalButton.Click += FlipHorizontalButton_Click;
+
+            var tabItem = new TabItem
+            {
+                Header = Path.GetFileName(filePath),
+                Content = new StackPanel
+                {
+                    Orientation = Avalonia.Layout.Orientation.Vertical,
+                    Children =
+                    {
+                        imageDimensionsTextBlock, // Use the field here
+                        imageControl,
+                        new StackPanel
+                        {
+                            Orientation = Avalonia.Layout.Orientation.Horizontal,
+                            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+                            Children =
+                            {
+                                loadButton,
+                                saveButton,
+                                saveButtonOverwrite,
+                                flipVerticalButton,
+                                flipHorizontalButton
+                            }
                         }
                     }
                 }
-            }
+            };
 
-            // Draw the border
-            DrawBorder(buffer, scaledWidth, scaledHeight, 0xFF000000, 2);
+            tabControl.Items.Add(tabItem);
+            tabControl.SelectedItem = tabItem;
+
+            ShowWritableBitmap(filePath, imageControl, context);
         }
-    }
 
-    // Assign the scaledBitmap to the image control
-    context.ImageControl.Source = context.ScaledBitmap;
-    Console.WriteLine("Bitmap updated and assigned to image control."); // Debug output
-}
-
-       private void AddNewTab(string filePath)
-{
-    var context = new TabContext { FilePath = filePath };
-
-    imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
-    {
-        Name = "imageDimensionsTextBlock",
-        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-        Margin = new Thickness(5)
-    };
-
-    var imageControl = new Image
-    {
-        Width = 300,
-        Height = 300,
-        Stretch = Avalonia.Media.Stretch.None,
-        Tag = context
-    };
-    imageControl.PointerPressed += ImageControl_PointerPressed;
-    context.ImageControl = imageControl;
-
-    var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
-    loadButton.Click += LoadButton_Click;
-
-    var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
-    saveButton.Click += SaveButtonAs_Click;
-
-    var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
-    saveButtonOverwrite.Click += SaveButton_Click;
-
-    var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
-    flipVerticalButton.Click += FlipVerticalButton_Click;
-
-    var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
-    flipHorizontalButton.Click += FlipHorizontalButton_Click;
-
-var closeButton = new Button
-{
-    Width = 35, // Set the width of the close button
-    Height = 35, // Set the height of the close button
-    Margin = new Thickness(0),
-    
-    Tag = context,
-    Content = new Image
-    {
-        Source = new Bitmap("close button.png"), // Path to your image file
-        Width = 33, // Set the width of the image
-        Height = 33 // Set the height of the image
-    }
-};
-closeButton.Click += CloseButton_Click;
-
-
-    var tabItem = new TabItem
-    {
-        Header = new StackPanel
+        private class TabContext
         {
-            Orientation = Avalonia.Layout.Orientation.Horizontal,
-            Children =
-            {
-                new TextBlock { Text = Path.GetFileName(filePath) },
-                closeButton
-            }
-        },
-        Content = new StackPanel
-        {
-            Orientation = Avalonia.Layout.Orientation.Vertical,
-            Children =
-            {
-                imageDimensionsTextBlock, // Use the field here
-                imageControl,
-                new StackPanel
-                {
-                    Orientation = Avalonia.Layout.Orientation.Horizontal,
-                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                    Children =
-                    {
-                        loadButton,
-                        saveButton,
-                        saveButtonOverwrite,
-                        flipVerticalButton,
-                        flipHorizontalButton
-                    }
-                }
-            }
+            public int[,] Matrix { get; set; }
+            public WriteableBitmap ScaledBitmap { get; set; }
+            public Image ImageControl { get; set; }
+            public string FilePath { get; set; }
+            public int ScaleFactor { get; set; }
         }
-    };
-
-    tabControl.Items.Add(tabItem);
-    tabControl.SelectedItem = tabItem;
-
-    ShowWritableBitmap(filePath, imageControl, context);
-}
-
-       private class TabContext
-{
-    public int[,] Matrix { get; set; }
-    public WriteableBitmap ScaledBitmap { get; set; }
-    public Image ImageControl { get; set; }
-    public string FilePath { get; set; }
-    public int ScaleFactor { get; set; }
-}
     }
 }
