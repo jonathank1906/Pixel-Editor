@@ -21,74 +21,85 @@ namespace avaloniadefaultapp
             InitializeDefaultTab("smile.b2img.txt");
         }
 
-        private void InitializeDefaultTab(string fileName)
+private void InitializeDefaultTab(string fileName)
+{
+    var context = new TabContext { FilePath = fileName };
+
+    imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
+    {
+        Name = "imageDimensionsTextBlock",
+        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+        Margin = new Thickness(5)
+    };
+
+    var imageControl = new Image
+    {
+        Width = 300,
+        Height = 300,
+        Stretch = Avalonia.Media.Stretch.None,
+        Tag = context
+    };
+    imageControl.PointerPressed += ImageControl_PointerPressed;
+    context.ImageControl = imageControl;
+
+    var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
+    loadButton.Click += LoadButton_Click;
+
+    var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
+    saveButton.Click += SaveButtonAs_Click;
+
+    var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
+    saveButtonOverwrite.Click += SaveButton_Click;
+
+    var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
+    flipVerticalButton.Click += FlipVerticalButton_Click;
+
+    var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
+    flipHorizontalButton.Click += FlipHorizontalButton_Click;
+
+    var tabItem = new TabItem
+    {
+        Header = new TextBlock { Text = Path.GetFileName(fileName) },
+        Content = new StackPanel
         {
-            var context = new TabContext { FilePath = fileName };
-
-            imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
+            Orientation = Avalonia.Layout.Orientation.Vertical,
+            Children =
             {
-                Name = "imageDimensionsTextBlock",
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                Margin = new Thickness(5)
-            };
-
-            var imageControl = new Image
-            {
-                Width = 300,
-                Height = 300,
-                Stretch = Avalonia.Media.Stretch.None,
-                Tag = context
-            };
-            imageControl.PointerPressed += ImageControl_PointerPressed;
-            context.ImageControl = imageControl;
-
-            var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
-            loadButton.Click += LoadButton_Click;
-
-            var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
-            saveButton.Click += SaveButtonAs_Click;
-
-            var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
-            saveButtonOverwrite.Click += SaveButton_Click;
-
-            var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
-            flipVerticalButton.Click += FlipVerticalButton_Click;
-
-            var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
-            flipHorizontalButton.Click += FlipHorizontalButton_Click;
-
-            var tabItem = new TabItem
-            {
-                Header = Path.GetFileName(fileName),
-                Content = new StackPanel
+                imageDimensionsTextBlock, // Use the field here
+                imageControl,
+                new StackPanel
                 {
-                    Orientation = Avalonia.Layout.Orientation.Vertical,
+                    Orientation = Avalonia.Layout.Orientation.Horizontal,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
                     Children =
                     {
-                        imageDimensionsTextBlock, // Use the field here
-                        imageControl,
-                        new StackPanel
-                        {
-                            Orientation = Avalonia.Layout.Orientation.Horizontal,
-                            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                            Children =
-                            {
-                                loadButton,
-                                saveButton,
-                                saveButtonOverwrite,
-                                flipVerticalButton,
-                                flipHorizontalButton
-                            }
-                        }
+                        loadButton,
+                        saveButton,
+                        saveButtonOverwrite,
+                        flipVerticalButton,
+                        flipHorizontalButton
                     }
                 }
-            };
-            tabControl.Items.Clear();
-            tabControl.Items.Add(tabItem);
-            tabControl.SelectedItem = tabItem;
-
-            ShowWritableBitmap(fileName, imageControl, context);
+            }
         }
+    };
+    tabControl.Items.Clear();
+    tabControl.Items.Add(tabItem);
+    tabControl.SelectedItem = tabItem;
+
+    ShowWritableBitmap(fileName, imageControl, context);
+}
+
+private void CloseButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+{
+    var button = sender as Button;
+    var context = button.Tag as TabContext;
+    var tabItem = tabControl.Items.OfType<TabItem>().FirstOrDefault(t => t.Content == context.ImageControl.Parent);
+    if (tabItem != null)
+    {
+        tabControl.Items.Remove(tabItem);
+    }
+}
 
         private unsafe void DrawBorder(uint* buffer, int scaledWidth, int scaledHeight, uint borderColor, int borderThickness)
         {
@@ -485,74 +496,99 @@ private void ShowWritableBitmap(string textFile, Image imageControl, TabContext 
     Console.WriteLine("Bitmap updated and assigned to image control."); // Debug output
 }
 
-        private void AddNewTab(string filePath)
+       private void AddNewTab(string filePath)
+{
+    var context = new TabContext { FilePath = filePath };
+
+    imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
+    {
+        Name = "imageDimensionsTextBlock",
+        HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
+        Margin = new Thickness(5)
+    };
+
+    var imageControl = new Image
+    {
+        Width = 300,
+        Height = 300,
+        Stretch = Avalonia.Media.Stretch.None,
+        Tag = context
+    };
+    imageControl.PointerPressed += ImageControl_PointerPressed;
+    context.ImageControl = imageControl;
+
+    var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
+    loadButton.Click += LoadButton_Click;
+
+    var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
+    saveButton.Click += SaveButtonAs_Click;
+
+    var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
+    saveButtonOverwrite.Click += SaveButton_Click;
+
+    var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
+    flipVerticalButton.Click += FlipVerticalButton_Click;
+
+    var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
+    flipHorizontalButton.Click += FlipHorizontalButton_Click;
+
+var closeButton = new Button
+{
+    Width = 35, // Set the width of the close button
+    Height = 35, // Set the height of the close button
+    Margin = new Thickness(0),
+    
+    Tag = context,
+    Content = new Image
+    {
+        Source = new Bitmap("close button.png"), // Path to your image file
+        Width = 33, // Set the width of the image
+        Height = 33 // Set the height of the image
+    }
+};
+closeButton.Click += CloseButton_Click;
+
+
+    var tabItem = new TabItem
+    {
+        Header = new StackPanel
         {
-            var context = new TabContext { FilePath = filePath };
-
-            imageDimensionsTextBlock = new TextBlock // Assign the TextBlock to the field
+            Orientation = Avalonia.Layout.Orientation.Horizontal,
+            Children =
             {
-                Name = "imageDimensionsTextBlock",
-                HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                Margin = new Thickness(5)
-            };
-
-            var imageControl = new Image
+                new TextBlock { Text = Path.GetFileName(filePath) },
+                closeButton
+            }
+        },
+        Content = new StackPanel
+        {
+            Orientation = Avalonia.Layout.Orientation.Vertical,
+            Children =
             {
-                Width = 300,
-                Height = 300,
-                Stretch = Avalonia.Media.Stretch.None,
-                Tag = context
-            };
-            imageControl.PointerPressed += ImageControl_PointerPressed;
-            context.ImageControl = imageControl;
-
-            var loadButton = new Button { Content = "Load", Margin = new Thickness(5), Tag = context };
-            loadButton.Click += LoadButton_Click;
-
-            var saveButton = new Button { Content = "Save As", Margin = new Thickness(5), Tag = context };
-            saveButton.Click += SaveButtonAs_Click;
-
-            var saveButtonOverwrite = new Button { Content = "Save", Margin = new Thickness(5), Tag = context };
-            saveButtonOverwrite.Click += SaveButton_Click;
-
-            var flipVerticalButton = new Button { Content = "Flip Vertical", Margin = new Thickness(5), Tag = context };
-            flipVerticalButton.Click += FlipVerticalButton_Click;
-
-            var flipHorizontalButton = new Button { Content = "Flip Horizontal", Margin = new Thickness(5), Tag = context };
-            flipHorizontalButton.Click += FlipHorizontalButton_Click;
-
-            var tabItem = new TabItem
-            {
-                Header = Path.GetFileName(filePath),
-                Content = new StackPanel
+                imageDimensionsTextBlock, // Use the field here
+                imageControl,
+                new StackPanel
                 {
-                    Orientation = Avalonia.Layout.Orientation.Vertical,
+                    Orientation = Avalonia.Layout.Orientation.Horizontal,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
                     Children =
                     {
-                        imageDimensionsTextBlock, // Use the field here
-                        imageControl,
-                        new StackPanel
-                        {
-                            Orientation = Avalonia.Layout.Orientation.Horizontal,
-                            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-                            Children =
-                            {
-                                loadButton,
-                                saveButton,
-                                saveButtonOverwrite,
-                                flipVerticalButton,
-                                flipHorizontalButton
-                            }
-                        }
+                        loadButton,
+                        saveButton,
+                        saveButtonOverwrite,
+                        flipVerticalButton,
+                        flipHorizontalButton
                     }
                 }
-            };
-
-            tabControl.Items.Add(tabItem);
-            tabControl.SelectedItem = tabItem;
-
-            ShowWritableBitmap(filePath, imageControl, context);
+            }
         }
+    };
+
+    tabControl.Items.Add(tabItem);
+    tabControl.SelectedItem = tabItem;
+
+    ShowWritableBitmap(filePath, imageControl, context);
+}
 
        private class TabContext
 {
