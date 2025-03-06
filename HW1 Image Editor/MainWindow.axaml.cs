@@ -270,7 +270,7 @@ namespace avaloniadefaultapp
             imageDimensionsTextBlock.Text = $"Size: {height}x{width}";
         }
 
-        private async void LoadButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private async void LoadButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var openFileDialog = new OpenFileDialog
             {
@@ -288,7 +288,7 @@ namespace avaloniadefaultapp
             }
         }
 
-        private async void SaveButtonAs_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private async void SaveButtonAs_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var saveFileDialog = new SaveFileDialog
             {
@@ -302,7 +302,11 @@ namespace avaloniadefaultapp
             var result = await saveFileDialog.ShowAsync(this);
             if (result != null)
             {
-                var context = (TabContext)((Button)sender).Tag;
+                
+                if (sender is Button button && button.Tag is TabContext context)
+                {
+                    if (context == null) return;
+    
                 using (var writer = new StreamWriter(result))
                 {
                     writer.WriteLine($"{context.Matrix.GetLength(0)} {context.Matrix.GetLength(1)}");
@@ -325,6 +329,7 @@ namespace avaloniadefaultapp
                     tabItem.Header = Path.GetFileName(result);
                 }
             }
+        }
         }
         private async void SaveButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
@@ -354,52 +359,52 @@ namespace avaloniadefaultapp
             }
         }
 
-        private void ImageControl_PointerPressed(object sender, PointerPressedEventArgs e)
+        private void ImageControl_PointerPressed(object? sender, PointerPressedEventArgs e)
+{
+    var imageControl = sender as Image;
+    var context = (TabContext)imageControl!.Tag;
+    var point = e.GetPosition(imageControl);
+    int x = (int)(point.X / context.ScaleFactor);
+    int y = (int)(point.Y / context.ScaleFactor);
+
+    if (x >= 0 && x < context.Matrix.GetLength(1) && y >= 0 && y < context.Matrix.GetLength(0))
+    {
+        context.Matrix[y, x] = context.Matrix[y, x] == 1 ? 0 : 1; // Toggle the pixel color
+
+        // Update the original bitmap
+        using (var fb = context.ScaledBitmap.Lock())
         {
-            var imageControl = sender as Image;
-            var context = (TabContext)imageControl.Tag;
-            var point = e.GetPosition(imageControl);
-            int x = (int)(point.X / context.ScaleFactor);
-            int y = (int)(point.Y / context.ScaleFactor);
-
-            if (x >= 0 && x < context.Matrix.GetLength(1) && y >= 0 && y < context.Matrix.GetLength(0))
+            unsafe
             {
-                context.Matrix[y, x] = context.Matrix[y, x] == 1 ? 0 : 1; // Toggle the pixel color
+                var buffer = (uint*)fb.Address;
+                uint color = context.Matrix[y, x] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
 
-                // Update the original bitmap
-                using (var fb = context.ScaledBitmap.Lock())
+                // Set the color for the scaled pixel size
+                for (int py = 0; py < context.ScaleFactor; py++)
                 {
-                    unsafe
+                    for (int px = 0; px < context.ScaleFactor; px++)
                     {
-                        var buffer = (uint*)fb.Address;
-                        uint color = context.Matrix[y, x] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
-
-                        // Set the color for the scaled pixel size
-                        for (int py = 0; py < context.ScaleFactor; py++)
-                        {
-                            for (int px = 0; px < context.ScaleFactor; px++)
-                            {
-                                int scaledIndex = (y * context.ScaleFactor + py) * context.ScaledBitmap.PixelSize.Width + (x * context.ScaleFactor + px);
-                                buffer[scaledIndex] = color;
-                            }
-                        }
-
-                        // Redraw the border
-                        DrawBorder(buffer, context.ScaledBitmap.PixelSize.Width, context.ScaledBitmap.PixelSize.Height, 0xFF000000, 2);
+                        int scaledIndex = (y * context.ScaleFactor + py) * context.ScaledBitmap.PixelSize.Width + (x * context.ScaleFactor + px);
+                        buffer[scaledIndex] = color;
                     }
                 }
 
-                // Refresh the image control
-                imageControl.InvalidateVisual();
-
-                // Add an asterisk to the tab header
-                var tabItem = tabControl.SelectedItem as TabItem;
-                if (tabItem != null && !tabItem.Header.ToString().EndsWith("*"))
-                {
-                    tabItem.Header += "*";
-                }
+                // Redraw the border
+                DrawBorder(buffer, context.ScaledBitmap.PixelSize.Width, context.ScaledBitmap.PixelSize.Height, 0xFF000000, 2);
             }
         }
+
+        // Refresh the image control
+        imageControl.InvalidateVisual();
+
+        // Add an asterisk to the tab header
+        var tabItem = tabControl.SelectedItem as TabItem;
+        if (tabItem != null && !tabItem.Header.ToString().EndsWith("*"))
+        {
+            tabItem.Header += "*";
+        }
+    }
+}
 
         private void FlipHorizontalButton_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
@@ -449,50 +454,52 @@ namespace avaloniadefaultapp
             UpdateBitmap(context);
         }
 
-        private void UpdateBitmap(TabContext context)
+       private void UpdateBitmap(TabContext context)
+{
+    if (context == null) return;
+
+    int height = context.Matrix.GetLength(0);
+    int width = context.Matrix.GetLength(1);
+
+    // Create a scaled WriteableBitmap
+    int scaledWidth = width * context.ScaleFactor;
+    int scaledHeight = height * context.ScaleFactor;
+    context.ScaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+
+    using (var fb = context.ScaledBitmap.Lock())
+    {
+        unsafe
         {
-            int height = context.Matrix.GetLength(0);
-            int width = context.Matrix.GetLength(1);
+            var buffer = (uint*)fb.Address;
 
-            // Create a scaled WriteableBitmap
-            int scaledWidth = width * context.ScaleFactor;
-            int scaledHeight = height * context.ScaleFactor;
-            context.ScaledBitmap = new WriteableBitmap(new PixelSize(scaledWidth, scaledHeight), new Vector(96, 96), PixelFormat.Bgra8888);
-
-            using (var fb = context.ScaledBitmap.Lock())
+            for (int i = 0; i < height; i++)
             {
-                unsafe
+                for (int j = 0; j < width; j++)
                 {
-                    var buffer = (uint*)fb.Address;
+                    int index = i * width + j;
+                    uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
 
-                    for (int i = 0; i < height; i++)
+                    // Set the color for the scaled pixel size
+                    for (int y = 0; y < context.ScaleFactor; y++)
                     {
-                        for (int j = 0; j < width; j++)
+                        for (int x = 0; x < context.ScaleFactor; x++)
                         {
-                            int index = i * width + j;
-                            uint color = context.Matrix[i, j] == 1 ? 0xFF000000 : 0xFFFFFFFF; // 1 = black, 0 = white
-
-                            // Set the color for the scaled pixel size
-                            for (int y = 0; y < context.ScaleFactor; y++)
-                            {
-                                for (int x = 0; x < context.ScaleFactor; x++)
-                                {
-                                    int scaledIndex = (i * context.ScaleFactor + y) * scaledWidth + (j * context.ScaleFactor + x);
-                                    buffer[scaledIndex] = color;
-                                }
-                            }
+                            int scaledIndex = (i * context.ScaleFactor + y) * scaledWidth + (j * context.ScaleFactor + x);
+                            buffer[scaledIndex] = color;
                         }
                     }
-
-                    // Draw the border
-                    DrawBorder(buffer, scaledWidth, scaledHeight, 0xFF000000, 2);
                 }
             }
 
-            // Assign the scaledBitmap to the image control
-            context.ImageControl.Source = context.ScaledBitmap;
-            Console.WriteLine("Bitmap updated and assigned to image control."); // Debug output
+            // Draw the border
+            DrawBorder(buffer, scaledWidth, scaledHeight, 0xFF000000, 2);
         }
+    }
+
+    // Assign the scaledBitmap to the image control
+    context.ImageControl.Source = context.ScaledBitmap;
+    Console.WriteLine("Bitmap updated and assigned to image control."); // Debug output
+}
 
         private void AddNewTab(string filePath)
         {
@@ -563,13 +570,13 @@ namespace avaloniadefaultapp
             ShowWritableBitmap(filePath, imageControl, context);
         }
 
-        private class TabContext
+        public class TabContext
         {
-            public int[,] Matrix { get; set; }
-            public WriteableBitmap ScaledBitmap { get; set; }
-            public Image ImageControl { get; set; }
-            public string FilePath { get; set; }
-            public int ScaleFactor { get; set; }
+            public int[,] Matrix { get; set; } = new int[0, 0];
+            public WriteableBitmap ScaledBitmap { get; set; } = null!;
+            public Image ImageControl { get; set; } = null!;
+            public string FilePath { get; set; } = string.Empty;
+            public int ScaleFactor { get; set; } = 1;
         }
     }
 }
