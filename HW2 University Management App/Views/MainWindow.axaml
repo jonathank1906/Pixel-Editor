@@ -8,7 +8,8 @@
 		Height="450"
         x:Class="HW2_University_Management_App.Views.MainWindow"
 		x:DataType="vm:MainWindowViewModel"
-		Title="Danfoss Heating System"
+		Title="University Management App"
+		WindowStartupLocation="CenterScreen"
 		CanResize="True">
 	
 	
@@ -23,7 +24,7 @@
 	
 		
 		<!-- Top Bar for navigation -->
-		<Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#F30000" Height="50">
+		<Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#EE7203" Height="50">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="130"/>
 				<ColumnDefinition Width="*"/>
@@ -33,23 +34,19 @@
 				<ColumnDefinition Width="30"/>
 			</Grid.ColumnDefinitions>
 			
-			<!-- Danfoss Main logo -->
-			<Button Grid.Column="0" 
-					Background="Transparent" 
-					Width="110" 
-					Height="40" 
-					Margin="10,0,20,0"
-					Command="{Binding GoHomeCommand}">
+
+		    <Button Background="Transparent" 
+					Grid.Column="0" 
+					Width="130" 
+					Height="44" 
+					Margin="10,0,20,0">
 				
-				
+				<Label Content="Courses"  FontSize="25" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 			</Button>
-			
-			
 		</Grid>
 
 		
 		<Grid Grid.Row="1" ColumnDefinitions="auto,*">
-
 			<!-- Main content Area -->
 			<ContentControl Grid.Column="1" Content="{Binding CurrentContent}" ZIndex="0"/>
 		</Grid>

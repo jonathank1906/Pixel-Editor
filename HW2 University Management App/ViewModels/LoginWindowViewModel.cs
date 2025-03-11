@@ -25,7 +25,7 @@ public partial class LoginWindowViewModel : ViewModelBase
     // Hardcoded user data
     private readonly List<User> userData = new List<User>
     {
-        new User { UserID = "user1", UserPassword = "password1" },
+        new User { UserID = "a", UserPassword = "a" },
         new User { UserID = "user2", UserPassword = "password2" }
     };
 
