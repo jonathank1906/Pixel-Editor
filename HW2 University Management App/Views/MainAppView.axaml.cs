@@ -1,17 +1,12 @@
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace HW2_University_Management_App.Views;
-
-public partial class MainAppView : UserControl
+namespace HW2_University_Management_App.Views
 {
-    public MainAppView()
+    public partial class MainAppWindow : Window
     {
-        InitializeComponent();
-    }
-
-    private void InitializeComponent()
-    {
-        AvaloniaXamlLoader.Load(this);
+        public MainAppWindow()
+        {
+            InitializeComponent();
+        }
     }
 }
