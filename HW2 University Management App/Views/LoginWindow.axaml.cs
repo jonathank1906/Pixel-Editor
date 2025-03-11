@@ -1,13 +1,12 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace HW2_University_Management_App;
-
-public partial class LoginWindow : UserControl
+namespace HW2_University_Management_App.Views
 {
-    public LoginWindow()
+    public partial class LoginWindow : Window
     {
-        InitializeComponent();
+        public LoginWindow()
+        {
+            InitializeComponent();
+        }
     }
 }
