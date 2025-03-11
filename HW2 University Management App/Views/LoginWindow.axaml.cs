@@ -1,12 +1,12 @@
 using Avalonia.Controls;
+using HW2_University_Management_App.Interfaces;
 
-namespace HW2_University_Management_App.Views
+namespace HW2_University_Management_App.Views;
+
+public partial class LoginWindow : Window, ICloseble
 {
-    public partial class LoginWindow : Window
+    public LoginWindow()
     {
-        public LoginWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

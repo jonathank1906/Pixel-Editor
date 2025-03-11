@@ -1,68 +1,70 @@
-﻿using System;
-using System.Reactive;
-using ReactiveUI;
-using Avalonia;
-using Avalonia.Interactivity;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using HW2_University_Management_App.Models;
 using HW2_University_Management_App.Views;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
-namespace HW2_University_Management_App.ViewModels
+namespace HW2_University_Management_App.ViewModels;
+
+public partial class LoginWindowViewModel : ViewModelBase
 {
-    public class LoginWindowViewModel : ViewModelBase
+    private Window closeable;
+
+    [ObservableProperty]
+    private string password = "";
+
+    [ObservableProperty]
+    private string username = "";
+
+    [ObservableProperty]
+    private bool signInSucceed = false;
+
+    // Hardcoded user data
+    private readonly List<User> userData = new List<User>
     {
-        private readonly LoginWindow _loginWindow;
+        new User { UserID = "user1", UserPassword = "password1" },
+        new User { UserID = "user2", UserPassword = "password2" }
+    };
 
-        private string userName = string.Empty;
-        private string password = string.Empty;
-        private string errorMessage = string.Empty;
-        private bool showPassword;
+    // Create Main window and sets the data context
+    Window mainWindow = new MainWindow();
+    MainWindowViewModel mainWindowViewModel;
 
-        public LoginWindowViewModel(LoginWindow loginWindow)
+    [RelayCommand]
+    private void WrongUsernameOrPassword()
+    {
+        foreach (var item in userData)
         {
-            _loginWindow = loginWindow;
-            LoginCommand = ReactiveCommand.Create(Login);
-        }
-
-        public string UserName
-        {
-            get => userName;
-            set => this.RaiseAndSetIfChanged(ref userName, value);
-        }
-
-        public string Password
-        {
-            get => password;
-            set => this.RaiseAndSetIfChanged(ref password, value);
-        }
-
-        public string ErrorMessage
-        {
-            get => errorMessage;
-            set => this.RaiseAndSetIfChanged(ref errorMessage, value);
-        }
-
-        public ReactiveCommand<Unit, Unit> LoginCommand { get; }
-
-        private void Login()
-        {
-            const string correctUsername = "Danfoss";
-            const string correctPassword = "Danfoss";
-
-            if (UserName == correctUsername && Password == correctPassword)
+            // checks if the Login was successful
+            if (item.UserID == Username)
             {
-                ErrorMessage = "Login successful!";
-                // Logic to switch to the main application view
-                // This might involve setting a property or calling a method on the main window
-            }
-            else
-            {
-                ErrorMessage = "Invalid username or password. Hint: Danfoss";
+                if (item.UserPassword == Password)
+                {
+                    SignInSucceed = true;
+                    Debug.WriteLine("Login successful");
+                    MainWindowOpen(item);
+                    return;
+                }
             }
         }
 
-        public bool ShowPassword
-        {
-            get => showPassword;
-            set => this.RaiseAndSetIfChanged(ref showPassword, value);
-        }
+    }
+
+    public void MainWindowOpen(User item)
+    {
+        mainWindowViewModel = new MainWindowViewModel(item, mainWindow);
+        mainWindow.DataContext = mainWindowViewModel;
+
+        // Closes and opens login page and main window
+        mainWindow.Show();
+        closeable.Close();
+    }
+
+    public LoginWindowViewModel(Window Cloneable)
+    {
+        closeable = Cloneable;
     }
 }

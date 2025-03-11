@@ -1,13 +1,60 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:HW2_University_Management_App.ViewModels"
+		xmlns:vm="clr-namespace:HW2_University_Management_App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		Width="800"
+		Height="450"
         x:Class="HW2_University_Management_App.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="HW2_University_Management_App">
+		x:DataType="vm:MainWindowViewModel"
+		Title="Danfoss Heating System"
+		CanResize="True">
+	
+	
+	<Grid>
+		<!-- Row definitions -->
+		<Grid.RowDefinitions>
+
+			<RowDefinition Height="Auto"/> <!-- makes only space for the heigt of the bar -->
+			<RowDefinition Height="*"/> <!-- gives the remaining space to the content view -->
+			
+		</Grid.RowDefinitions>
+	
+		
+		<!-- Top Bar for navigation -->
+		<Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#F30000" Height="50">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="130"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="30"/>
+				<ColumnDefinition Width="30"/>
+			</Grid.ColumnDefinitions>
+			
+			<!-- Danfoss Main logo -->
+			<Button Grid.Column="0" 
+					Background="Transparent" 
+					Width="110" 
+					Height="40" 
+					Margin="10,0,20,0"
+					Command="{Binding GoHomeCommand}">
+				
+				
+			</Button>
+			
+			
+		</Grid>
+
+		
+		<Grid Grid.Row="1" ColumnDefinitions="auto,*">
+
+			<!-- Main content Area -->
+			<ContentControl Grid.Column="1" Content="{Binding CurrentContent}" ZIndex="0"/>
+		</Grid>
+	</Grid>
+
 
 
 </Window>

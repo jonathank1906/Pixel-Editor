@@ -1,32 +1,50 @@
-﻿using System;
-using ReactiveUI;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using HW2_University_Management_App.Models;
+using HW2_University_Management_App.ViewModels.AdminMainPage;
 using HW2_University_Management_App.Views;
+using ReactiveUI;
+using System.Collections.ObjectModel;
+
 
 namespace HW2_University_Management_App.ViewModels
 {
-    public class MainWindowViewModel : ReactiveObject
+    public partial class MainWindowViewModel : ViewModelBase
     {
-        public MainWindowViewModel()
+        public Window window;
+
+        public User userName;
+
+        [ObservableProperty]
+        private object currentContent;
+
+        [RelayCommand]
+        private void logout()
         {
-            MainApp = new MainAppViewModel();
+
             var loginWindow = new LoginWindow();
-            Login = new LoginWindowViewModel(loginWindow);
-            _contentViewModel = Login;
+            loginWindow.DataContext = new LoginWindowViewModel(loginWindow); // Passes the window so it can be manipulated
+
+            loginWindow.Show();
+            window.Close();
         }
 
-        public LoginWindowViewModel Login { get; }
-        public MainAppViewModel MainApp { get; }
-        private ViewModelBase _contentViewModel;
-
-        public ViewModelBase ContentViewModel
+        [RelayCommand]
+        private void GoHome()
         {
-            get => _contentViewModel;
-            set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
+            if (userName.UserRole == "Admin")
+            {
+                window.Width = 800;
+                window.Height = 450;
+                CurrentContent = new AdminView() { DataContext = new AdminMainPageViewModel(this) };
+            }
         }
 
-        public void LoginButtonCommand()
+        public MainWindowViewModel(User item, Window window)
         {
-            ContentViewModel = MainApp;
+            this.window = window;
+            userName = item;
         }
     }
 }
