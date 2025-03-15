@@ -26,8 +26,11 @@ public partial class LoginWindowViewModel : ViewModelBase
     private readonly List<User> userData = new List<User>
     {
         new User { UserID = "a", UserPassword = "a" },
-        new User { UserID = "user2", UserPassword = "password2" }
-    };
+        new User { UserID = "user2", UserPassword = "password2" },
+        new User { UserID = "jake", UserPassword = "student123", UserRole = "Student", EnrolledSubjects = new List<string> { "Math", "Physics" } },
+        new User { UserID = "sarah", UserPassword = "teacher123", UserRole = "Teacher", CreatedSubjects = new List<string> { "Math", "Physics" } }
+     };
+    
 
     // Create Main window and sets the data context
     Window mainWindow = new MainWindow();
@@ -67,4 +70,5 @@ public partial class LoginWindowViewModel : ViewModelBase
     {
         closeable = Cloneable;
     }
-}
+};
+    // Method to close the login window

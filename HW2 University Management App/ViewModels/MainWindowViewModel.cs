@@ -17,7 +17,7 @@ namespace HW2_University_Management_App.ViewModels
         public User userName;
 
         [ObservableProperty]
-        private object currentContent;
+        private object? currentContent;
 
         [RelayCommand]
         private void logout()
@@ -45,6 +45,15 @@ namespace HW2_University_Management_App.ViewModels
         {
             this.window = window;
             userName = item;
+
+            if (userName.UserRole == "Student")
+            {
+                CurrentContent = new StudentDashboardView() { DataContext = new StudentDashboardViewModel(userName) };
+            }
+            else if (userName.UserRole == "Teacher")
+            {
+                CurrentContent = new TeacherDashboardView() { DataContext = new TeacherDashboardViewModel(userName) };
+            }
         }
     }
 }
