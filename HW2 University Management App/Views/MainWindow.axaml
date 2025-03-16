@@ -10,6 +10,7 @@
 		x:DataType="vm:MainWindowViewModel"
 		Title="University Management App"
 		WindowStartupLocation="CenterScreen"
+		WindowState="Maximized"
 		CanResize="True">
 	
 	

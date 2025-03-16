@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HW2_University_Management_App.Models;
+using HW2_University_Management_App.Services;
 using HW2_University_Management_App.ViewModels.AdminMainPage;
 using HW2_University_Management_App.Views;
 using ReactiveUI;
@@ -15,6 +16,7 @@ namespace HW2_University_Management_App.ViewModels
         public Window window;
 
         public User userName;
+        private readonly SubjectService subjectService; 
 
         [ObservableProperty]
         private object? currentContent;
@@ -45,6 +47,7 @@ namespace HW2_University_Management_App.ViewModels
         {
             this.window = window;
             userName = item;
+            subjectService = new SubjectService();
 
             if (userName.UserRole == "Student")
             {

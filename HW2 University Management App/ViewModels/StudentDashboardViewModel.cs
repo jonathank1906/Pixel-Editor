@@ -38,23 +38,25 @@ namespace HW2_University_Management_App.ViewModels
 
         private void LoadSubjects()
         {
-           var subjects = subjectService.GetAvailableSubjects();
+            var subjects = subjectService.GetSubjects();
 
             foreach (var subject in subjects)
             {
                 var color = ColorStyles.GetRandomColor();
 
-                if (student.EnrolledSubjects.Contains(subject.Name))
+                // Compare student.EnrolledSubjects with subject.SubjectID, not subject.Name
+                if (student.EnrolledSubjects.Contains(subject.SubjectID))  // Compare using SubjectID
                     EnrolledSubjects.Add(new ColoredSubject(subject.Name, color));
                 else
                     AvailableSubjects.Add(new ColoredSubject(subject.Name, color));
             }
         }
 
+
         [RelayCommand]
         private void EnrollInSubject()
         {
-            if (SelectedAvailableSubject != null) 
+            if (SelectedAvailableSubject != null)
             {
                 student.EnrolledSubjects.Add(SelectedAvailableSubject.Name);
                 subjectService.EnrollStudent(student.UserID, SelectedAvailableSubject.Name);

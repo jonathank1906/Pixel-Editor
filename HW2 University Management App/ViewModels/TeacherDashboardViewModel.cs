@@ -36,7 +36,10 @@ namespace HW2_University_Management_App.ViewModels
         private void LoadSubjects()
         {
             CreatedSubjects.Clear();
-            foreach (var subject in subjectService.GetSubjectsByTeacher(teacher.UserID))
+            // Filter subjects by the teacher's UserID
+            var teacherSubjects = subjectService.GetSubjects().Where(s => s.TeacherID == teacher.UserID);
+
+            foreach (var subject in teacherSubjects)
             {
                 var color = ColorStyles.GetRandomColor();
                 CreatedSubjects.Add(new ColoredSubject(subject.Name, color));
@@ -60,7 +63,7 @@ namespace HW2_University_Management_App.ViewModels
             if (!string.IsNullOrEmpty(SelectedCreatedSubject))
             {
                 subjectService.DeleteSubject(SelectedCreatedSubject);
-               // LoadSubjects(); // Refresh the list
+                // LoadSubjects(); // Refresh the list
             }
         }
     }

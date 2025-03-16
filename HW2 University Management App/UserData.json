@@ -1,0 +1,85 @@
+{
+    "Users": [
+      {
+        "UserID": "jake",
+        "UserPassword": "student123",
+        "UserRole": "Student",
+        "EnrolledSubjects": ["101", "102"]
+      },
+      {
+        "UserID": "jonathan",
+        "UserPassword": "j123",
+        "UserRole": "Student",
+        "EnrolledSubjects": ["101", "102", "103", "105"]
+      },
+      {
+        "UserID": "sarah",
+        "UserPassword": "teacher123",
+        "UserRole": "Teacher",
+        "CreatedSubjects": ["101", "102", "103", "104", "105", "106", "107", "108", "109", "110"]
+      }
+    ],
+    "Subjects": [
+      {
+        "SubjectID": "101",
+        "Name": "Math",
+        "TeacherID": "sarah",
+        "EnrolledStudents": ["jake", "jonathan"]
+      },
+      {
+        "SubjectID": "102",
+        "Name": "Physics",
+        "TeacherID": "sarah",
+        "EnrolledStudents": ["jake", "jonathan"]
+      },
+      {
+        "SubjectID": "103",
+        "Name": "Biology",
+        "TeacherID": "sarah",
+        "EnrolledStudents": ["jonathan"]
+      },
+      {
+        "SubjectID": "104",
+        "Name": "Chemistry",
+        "TeacherID": "sarah",
+        "EnrolledStudents": []
+      },
+      {
+        "SubjectID": "105",
+        "Name": "Sports",
+        "TeacherID": "sarah",
+        "EnrolledStudents": ["jonathan"]
+      },
+      {
+        "SubjectID": "106",
+        "Name": "Computer",
+        "TeacherID": "sarah",
+        "EnrolledStudents": []
+      },
+      {
+        "SubjectID": "107",
+        "Name": "Spanish",
+        "TeacherID": "sarah",
+        "EnrolledStudents": []
+      },
+      {
+        "SubjectID": "108",
+        "Name": "JavaScript",
+        "TeacherID": "sarah",
+        "EnrolledStudents": []
+      },
+      {
+        "SubjectID": "109",
+        "Name": "Python",
+        "TeacherID": "sarah",
+        "EnrolledStudents": []
+      },
+      {
+        "SubjectID": "110",
+        "Name": "HTML",
+        "TeacherID": "sarah",
+        "EnrolledStudents": []
+      }
+    ]
+  }
+  
