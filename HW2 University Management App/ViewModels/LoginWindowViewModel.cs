@@ -6,6 +6,7 @@ using HW2_University_Management_App.Views;
 using HW2_University_Management_App.Services;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace HW2_University_Management_App.ViewModels
 {
@@ -13,6 +14,8 @@ namespace HW2_University_Management_App.ViewModels
     {
         private readonly Window closeable;
         private readonly SubjectService subjectService;
+
+        private string errorMessage = string.Empty;
         
         [ObservableProperty]
         private string password = "";
@@ -30,8 +33,14 @@ namespace HW2_University_Management_App.ViewModels
             subjectService = new SubjectService(); // Load users from JSON
         }
 
+        public string ErrorMessage
+        {
+            get => errorMessage;
+            set => this.SetProperty(ref errorMessage, value);
+        }
+
         [RelayCommand]
-        public void AttemptLogin()
+        public async Task AttemptLogin()
         {
             User user = subjectService.AuthenticateUser(Username, Password);
 
@@ -43,8 +52,15 @@ namespace HW2_University_Management_App.ViewModels
             }
             else
             {
-                Debug.WriteLine("Login failed: Invalid username or password");
+                ErrorMessage = "Invalid username or password";
+                await ClearErrorMessageAfterDelay();
             }
+        }
+
+        private async Task ClearErrorMessageAfterDelay()
+        {
+            await Task.Delay(2500);
+            ErrorMessage = string.Empty;
         }
 
         private void OpenMainWindow(User user)
