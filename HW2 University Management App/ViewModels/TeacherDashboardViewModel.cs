@@ -69,5 +69,6 @@ namespace HW2_University_Management_App.ViewModels
                 LoadSubjects(); // Refresh the list after deletion
             }
         }
+        
     }
 }
