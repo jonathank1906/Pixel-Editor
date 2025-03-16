@@ -4,6 +4,8 @@ using CommunityToolkit.Mvvm.Input;
 using HW2_University_Management_App.Models;
 using HW2_University_Management_App.Services;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 using System;
 
 namespace HW2_University_Management_App.ViewModels
@@ -62,7 +64,7 @@ namespace HW2_University_Management_App.ViewModels
             if (!string.IsNullOrEmpty(SelectedCreatedSubject))
             {
                 subjectService.DeleteSubject(SelectedCreatedSubject);
-                LoadSubjects(); // Refresh the list
+               // LoadSubjects(); // Refresh the list
             }
         }
     }
