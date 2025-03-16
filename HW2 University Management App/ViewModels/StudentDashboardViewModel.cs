@@ -10,8 +10,8 @@ using System.Collections.ObjectModel;
 using System;
 using System.Diagnostics;
 using System.Windows.Input;
-
 using Avalonia.Input;
+
 namespace HW2_University_Management_App.ViewModels
 {
     public partial class StudentDashboardViewModel : ViewModelBase
@@ -22,8 +22,10 @@ namespace HW2_University_Management_App.ViewModels
 
         public ObservableCollection<ColoredSubject> EnrolledSubjects { get; set; }
         public ObservableCollection<ColoredSubject> AvailableSubjects { get; set; }
+
         [ObservableProperty]
         private ColoredSubject selectedAvailableSubject;
+
         [ObservableProperty]
         private ColoredSubject selectedEnrolledSubject;
 
@@ -52,8 +54,6 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
-
-
         [RelayCommand]
         private void EnrollInSubject()
         {
@@ -68,7 +68,6 @@ namespace HW2_University_Management_App.ViewModels
                 subjectService.SaveData();  // Save the data after enrollment
             }
         }
-
 
         [RelayCommand]
         private void DropSubject()
@@ -90,14 +89,18 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
-
         [RelayCommand]
-        private void OnSubjectClicked(ColoredSubject subject)
+        public void OnSubjectClicked(ColoredSubject subject)
         {
-            // Handle the click event for the subject
-            Debug.WriteLine($"Subject clicked: {subject.Name}");
+           
         }
 
+        // Method to deselect both selected subjects
+        public void DeselectSubject()
+        {
+            SelectedEnrolledSubject = null;
+            SelectedAvailableSubject = null;
+        }
 
     }
 }

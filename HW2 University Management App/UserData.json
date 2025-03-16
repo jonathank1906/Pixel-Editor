@@ -6,7 +6,7 @@
       "UserRole": "Student",
       "EnrolledSubjects": [
         "101",
-        "102"
+        "107"
       ],
       "CreatedSubjects": []
     },
@@ -58,8 +58,7 @@
       "Name": "Physics",
       "TeacherID": "sarah",
       "EnrolledStudents": [
-        "jonathan",
-        "jake"
+        "jonathan"
       ]
     },
     {
@@ -94,7 +93,9 @@
       "SubjectID": "107",
       "Name": "Spanish",
       "TeacherID": "sarah",
-      "EnrolledStudents": []
+      "EnrolledStudents": [
+        "jake"
+      ]
     },
     {
       "SubjectID": "108",

@@ -47,7 +47,7 @@
 
             <!-- Create New Subject -->
             <TextBlock Text="➕ Create a New Subject" FontSize="18" FontWeight="SemiBold" Margin="0,20,0,5"/>
-            <TextBox Text="{Binding NewSubjectName}" Width="250"/>
+            <TextBox Text="{Binding NewSubjectName}" Watermark="Enter subject name" Width="250"/>
             <Button Content="Create" Command="{Binding CreateSubjectCommand}" Click="OpenDialog" Margin="0,5,0,0"/>
         </StackPanel>
     </ScrollViewer>
