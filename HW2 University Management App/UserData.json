@@ -5,7 +5,8 @@
       "UserPassword": "student123",
       "UserRole": "Student",
       "EnrolledSubjects": [
-        "101"
+        "101",
+        "102"
       ],
       "CreatedSubjects": []
     },
@@ -36,7 +37,9 @@
         "107",
         "108",
         "109",
-        "110"
+        "110",
+        "111",
+        "112"
       ]
     }
   ],
@@ -55,7 +58,8 @@
       "Name": "Physics",
       "TeacherID": "sarah",
       "EnrolledStudents": [
-        "jonathan"
+        "jonathan",
+        "jake"
       ]
     },
     {
@@ -107,6 +111,18 @@
     {
       "SubjectID": "110",
       "Name": "HTML",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "111",
+      "Name": "coding",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "112",
+      "Name": "testing123",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     }
