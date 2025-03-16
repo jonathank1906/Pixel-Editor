@@ -34,14 +34,15 @@
 				<ColumnDefinition Width="30"/>
 			</Grid.ColumnDefinitions>
 			
-
-		    <Button Background="Transparent" 
-					Grid.Column="0" 
-					Width="130" 
-					Height="44" 
-					Margin="10,0,20,0">
-				
-				<Label Content="Courses"  FontSize="25" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+	
+			<!-- Logout button -->
+			<Button Background="Transparent" 
+					Content="Log out" FontSize="25" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"
+					Grid.Column="4" 
+					Width="120"
+					Height="44"
+					Margin="0,0,0,0" 
+					Command="{Binding logoutCommand}">
 			</Button>
 		</Grid>
 

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HW2_University_Management_App.Models;
 using HW2_University_Management_App.Services;
+using HW2_University_Management_App.Styles;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -37,14 +38,9 @@ namespace HW2_University_Management_App.ViewModels
             CreatedSubjects.Clear();
             foreach (var subject in subjectService.GetSubjectsByTeacher(teacher.UserID))
             {
-                CreatedSubjects.Add(new ColoredSubject(subject.Name, GetRandomColor()));
+                var color = ColorStyles.GetRandomColor();
+                CreatedSubjects.Add(new ColoredSubject(subject.Name, color));
             }
-        }
-
-        private SolidColorBrush GetRandomColor()
-        {
-            string[] colors = { "#FFB6C1", "#ADD8E6", "#90EE90", "#FFFFE0" }; // Light Pink, Light Blue, Light Green, Light Yellow
-            return new SolidColorBrush(Color.Parse(colors[random.Next(colors.Length)]));
         }
 
         [RelayCommand]

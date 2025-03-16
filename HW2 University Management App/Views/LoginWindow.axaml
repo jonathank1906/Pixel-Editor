@@ -5,21 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="HW2_University_Management_App.Views.LoginWindow"
-		x:DataType="vm:LoginWindowViewModel"
+        x:DataType="vm:LoginWindowViewModel"
         Title="University Management App"
-		Width="500"
-		Height="350"
+        Width="500"
+        Height="350"
         CanResize="False" 
-		WindowStartupLocation="CenterScreen"
-		Background="White">
+        WindowStartupLocation="CenterScreen"
+        Background="#5D4A68"
+		ExtendClientAreaToDecorationsHint="True">
 
- 	<StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-		<Label Foreground="Black" Margin="0,0,0,0" Content="Username" FontSize="20"/>
-		<TextBox Text="{Binding Username}" Height="20" Width="200" Watermark="Username"/>
-		
-		<Label Foreground="Black" Margin="0,20,0,0" Content="Password" FontSize="20"/>
-		<TextBox Text="{Binding Password}" Height="20" Width="200" Watermark="Password" PasswordChar="*"/>
+    <Border Background="White" CornerRadius="10" BorderBrush="White" BorderThickness="2" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Label Foreground="Black" Margin="0,0,0,0" Content="Username" FontSize="20"/>
+            <TextBox Text="{Binding Username}" Height="20" Width="200" Watermark="Username"/>
+            
+            <Label Foreground="Black" Margin="0,20,0,0" Content="Password" FontSize="20"/>
+            <TextBox Text="{Binding Password}" Height="20" Width="200" Watermark="Password" PasswordChar="*"/>
 
-		<Button Margin="0,20,0,0" Height="35" Width="150" Content="Login" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="18"  Background="#ECECEC" CornerRadius="8" Command="{Binding WrongUsernameOrPasswordCommand}"/>
-	</StackPanel>
+            <Button Margin="0,20,0,0" Height="35" Width="150" Content="Login" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="18"  Background="#ECECEC" CornerRadius="8" Command="{Binding WrongUsernameOrPasswordCommand}"/>
+        </StackPanel>
+    </Border>
 </Window>

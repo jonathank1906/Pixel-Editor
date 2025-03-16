@@ -16,9 +16,9 @@ namespace HW2_University_Management_App.ViewModels
 {
     public partial class StudentDashboardViewModel : ViewModelBase
     {
-        private readonly SubjectService subjectService = new SubjectService();
+        private readonly SubjectService subjectService = new();
         private readonly User student;
-        private readonly Random random = new Random();
+        private readonly Random random = new();
 
         public ObservableCollection<ColoredSubject> EnrolledSubjects { get; set; }
         public ObservableCollection<ColoredSubject> AvailableSubjects { get; set; }

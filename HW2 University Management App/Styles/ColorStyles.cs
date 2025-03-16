@@ -8,10 +8,15 @@ namespace HW2_University_Management_App.Styles
     {
         private static readonly List<Color> subjectColors = new()
         {
-            Colors.LightBlue,
-            Colors.LightGreen,
-            Colors.LightCoral,  // Light red
-            Colors.LightGoldenrodYellow  // Light yellow
+            Color.Parse("#FFD5BC"),
+            Color.Parse("#D7CCC8"),
+            Color.Parse("#DACAF6"),
+            Color.Parse("#F8C7DE"),
+            Color.Parse("#C4ECFF"),
+            Color.Parse("#C5F0C9"),
+            Color.Parse("#E9F6CC"),
+            Color.Parse("#FEEBBB"),
+            Color.Parse("#D9E3E8"),
         };
 
         private static readonly Random random = new();

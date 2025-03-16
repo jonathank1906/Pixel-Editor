@@ -28,7 +28,7 @@ public partial class LoginWindowViewModel : ViewModelBase
         new User { UserID = "a", UserPassword = "a" },
         new User { UserID = "user2", UserPassword = "password2" },
         new User { UserID = "jake", UserPassword = "student123", UserRole = "Student", EnrolledSubjects = new List<string> { "Math", "Physics" } },
-        new User { UserID = "sarah", UserPassword = "teacher123", UserRole = "Teacher", CreatedSubjects = new List<string> { "Math", "Physics" } },
+        new User { UserID = "sarah", UserPassword = "teacher123", UserRole = "Teacher" },
         new User { UserID = "jonathan", UserPassword = "j123", UserRole = "Student", EnrolledSubjects = new List<string> { "Math", "Physics", "Biology", "Sports" } },
         new User { UserID = "azzam", UserPassword = "a123", UserRole = "Teacher", CreatedSubjects = new List<string> { "Math", "Physics" } },
      };
@@ -72,7 +72,8 @@ public partial class LoginWindowViewModel : ViewModelBase
 
     public LoginWindowViewModel(Window Cloneable)
     {
+        // Method to close the login window
         closeable = Cloneable;
     }
 };
-    // Method to close the login window
+    
