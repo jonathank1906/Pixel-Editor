@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:HW2_University_Management_App.ViewModels"
+             xmlns:vm="using:HW2_University_Management_App.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HW2_University_Management_App.Views.StudentDashboardView"
              x:DataType="vm:StudentDashboardViewModel">
@@ -37,7 +37,7 @@
                     </ListBox>
                 </WrapPanel>
             </Border>
-            <Button Content="Drop Selected Subject" Command="{Binding DropSubjectCommand}" Margin="0,10,0,0"/>
+            <Button Content="Drop Selected Subject" Command="{Binding DropSubjectCommand}" Click="OpenDialog" Margin="0,10,0,0"/>
 
             <!-- Available Subjects -->
             <TextBlock Text="📖 Available Subjects" FontSize="18" FontWeight="SemiBold" Margin="0,20,0,5"/>
@@ -64,7 +64,7 @@
                     </ListBox>
                 </WrapPanel>
             </Border>
-            <Button Content="Enroll in Selected Subject" Command="{Binding EnrollInSubjectCommand}" Margin="0,10,0,0"/>
+            <Button Content="Enroll in Selected Subject" Command="{Binding EnrollInSubjectCommand}" Click="OpenDialog" Margin="0,10,0,0"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

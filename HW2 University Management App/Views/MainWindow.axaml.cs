@@ -9,4 +9,9 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = this;
     }
+    private async void OpenDialog(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        var dialog = new DialogWindow();
+        await dialog.ShowDialog(this); // Opens the dialog as a modal window
+    }
 }

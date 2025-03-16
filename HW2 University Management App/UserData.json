@@ -36,8 +36,7 @@
         "107",
         "108",
         "109",
-        "110",
-        "111"
+        "110"
       ]
     }
   ],
@@ -108,12 +107,6 @@
     {
       "SubjectID": "110",
       "Name": "HTML",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "111",
-      "Name": "cars",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     }
