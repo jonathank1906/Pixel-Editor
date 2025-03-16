@@ -44,13 +44,14 @@ namespace HW2_University_Management_App.ViewModels
             {
                 var color = ColorStyles.GetRandomColor();
 
-                // Compare student.EnrolledSubjects with subject.SubjectID, not subject.Name
-                if (student.EnrolledSubjects.Contains(subject.SubjectID))  // Compare using SubjectID
-                    EnrolledSubjects.Add(new ColoredSubject(subject.Name, color));
+                // Create ColoredSubject with SubjectID
+                if (student.EnrolledSubjects.Contains(subject.SubjectID))
+                    EnrolledSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, color));
                 else
-                    AvailableSubjects.Add(new ColoredSubject(subject.Name, color));
+                    AvailableSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, color));
             }
         }
+
 
 
         [RelayCommand]
@@ -58,26 +59,37 @@ namespace HW2_University_Management_App.ViewModels
         {
             if (SelectedAvailableSubject != null)
             {
-                student.EnrolledSubjects.Add(SelectedAvailableSubject.Name);
-                subjectService.EnrollStudent(student.UserID, SelectedAvailableSubject.Name);
+                student.EnrolledSubjects.Add(SelectedAvailableSubject.SubjectID);  // Use SubjectID for enrollment
+                subjectService.EnrollStudent(student.UserID, SelectedAvailableSubject.SubjectID);
 
                 EnrolledSubjects.Add(SelectedAvailableSubject);
                 AvailableSubjects.Remove(SelectedAvailableSubject);
+
+                subjectService.SaveData();  // Save the data after enrollment
             }
         }
+
 
         [RelayCommand]
         private void DropSubject()
         {
             if (SelectedEnrolledSubject != null)
             {
-                student.EnrolledSubjects.Remove(SelectedEnrolledSubject.Name);
-                subjectService.DropStudent(student.UserID, SelectedEnrolledSubject.Name);
+                // Remove the SubjectID from the student's enrolled subjects
+                student.EnrolledSubjects.Remove(SelectedEnrolledSubject.SubjectID);
 
+                // Drop the student from the subject in the service (using SubjectID)
+                subjectService.DropStudent(student.UserID, SelectedEnrolledSubject.SubjectID);
+
+                // Move the subject back to AvailableSubjects
                 AvailableSubjects.Add(SelectedEnrolledSubject);
                 EnrolledSubjects.Remove(SelectedEnrolledSubject);
+
+                // Save data after dropping the subject
+                subjectService.SaveData();
             }
         }
+
 
         [RelayCommand]
         private void OnSubjectClicked(ColoredSubject subject)

@@ -38,7 +38,7 @@ namespace HW2_University_Management_App.Services
         }
 
         // 🔹 Save Users & Subjects to JSON
-        private void SaveData()
+        public void SaveData()
         {
             var database = new Database { Subjects = subjects, Users = users };
             string json = JsonSerializer.Serialize(database, new JsonSerializerOptions { WriteIndented = true });
