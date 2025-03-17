@@ -1,49 +1,84 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:HW2_University_Management_App.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="HW2_University_Management_App.Views.TeacherDashboardView"
-             x:DataType="vm:TeacherDashboardViewModel">
+<UserControl
+    x:Class="HW2_University_Management_App.Views.TeacherDashboardView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:HW2_University_Management_App.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:TeacherDashboardViewModel"
+    mc:Ignorable="d">
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20">
 
-            <TextBlock Text="👩‍🏫 Teacher Dashboard" FontSize="24" FontWeight="Bold" Foreground="DarkRed" Margin="0,0,0,10"/>
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="24"
+                FontWeight="Bold"
+                Foreground="DarkRed"
+                Text="👩‍🏫 Teacher Dashboard" />
 
-            <!-- Created Subjects -->
-            <TextBlock Text="📌 Your Subjects" FontSize="18" FontWeight="SemiBold" Margin="0,10,0,5"/>
-            <Border BorderBrush="Gray" BorderThickness="0.4" Padding="10" CornerRadius="10" Background="#F2F2F2" Margin="5">
+            <!--  Created Subjects  -->
+            <TextBlock
+                Margin="0,10,0,5"
+                FontSize="18"
+                FontWeight="SemiBold"
+                Text="📌 Your Subjects" />
+            <Border
+                Margin="5"
+                Padding="10"
+                Background="#F2F2F2"
+                BorderBrush="Gray"
+                BorderThickness="0.4"
+                CornerRadius="10">
                 <WrapPanel HorizontalAlignment="Stretch">
-                    <ListBox ItemsSource="{Binding CreatedSubjects}" 
-                             SelectedItem="{Binding SelectedExistingSubject}"
-                             SelectionMode="Single"
-                             Background="Transparent"
-                             BorderThickness="0">
+                    <ListBox
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemsSource="{Binding CreatedSubjects}"
+                        SelectedItem="{Binding SelectedExistingSubject}"
+                        SelectionMode="Single">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel HorizontalAlignment="Stretch"/>
+                                <WrapPanel HorizontalAlignment="Stretch" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <ListBoxItem Background="{Binding BackgroundColor}"
-                                             BorderBrush="Gray" BorderThickness="2"
-                                             Margin="5" Width="180" Height="120"
-                                             CornerRadius="10"
-                                             Padding="0">
-                                    
-                                    <!-- 🔹 Apply Tooltip to the whole ListBoxItem -->
+                                <ListBoxItem
+                                    Width="180"
+                                    Height="120"
+                                    Margin="5"
+                                    Padding="0"
+                                    Background="{Binding BackgroundColor}"
+                                    BorderBrush="Gray"
+                                    BorderThickness="2"
+                                    CornerRadius="10">
+
+                                    <!--  🔹 Apply Tooltip to the whole ListBoxItem  -->
                                     <ToolTip.Tip>
-                                        <Border Background="White" Padding="10" CornerRadius="5">
-                                            <TextBlock Text="{Binding Description}" MaxWidth="300" TextWrapping="Wrap"/>
+                                        <Border
+                                            Padding="10"
+                                            Background="White"
+                                            CornerRadius="5">
+                                            <TextBlock
+                                                MaxWidth="300"
+                                                Text="{Binding Description}"
+                                                TextWrapping="Wrap" />
                                         </Border>
                                     </ToolTip.Tip>
 
-                                    <Grid Width="180" Height="120"> <!-- Increased height for better spacing -->
-                                        <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold"
-                                                   Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Grid Width="180" Height="120"> 
+                                        <!--  Increased height for better spacing  -->
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Foreground="Black"
+                                            Text="{Binding Name}" />
                                     </Grid>
                                 </ListBoxItem>
                             </DataTemplate>
@@ -51,27 +86,62 @@
                     </ListBox>
                 </WrapPanel>
             </Border>
-            <Button Content="Delete Selected Subject" Command="{Binding DeleteSubjectCommand}" Margin="0,10,0,0"/>
+            <Button
+                Margin="0,10,0,0"
+                Command="{Binding DeleteSubjectCommand}"
+                Content="Delete Selected Subject" />
 
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-    <!-- Rounded background container with light grey color -->
-    <Border Background="LightGray" CornerRadius="10" Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
-            <!-- Create New Subject -->
-            <TextBlock Text="➕ Create a New Subject" FontSize="18" FontWeight="SemiBold" Margin="0,20,0,5" HorizontalAlignment="Center"/>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!--  Rounded background container with light grey color  -->
+                <Border
+                    Padding="20"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="LightGray"
+                    CornerRadius="10">
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Spacing="10">
+                        <!--  Create New Subject  -->
+                        <TextBlock
+                            Margin="0,20,0,5"
+                            HorizontalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="SemiBold"
+                            Text="➕ Create a New Subject" />
 
-            <!-- Message Area -->
-            <TextBlock Text="{Binding CreationMessage}" Foreground="Green" FontWeight="SemiBold" FontSize="12" Margin="0,10,0,0" HorizontalAlignment="Center"/>
+                        <!--  Message Area  -->
+                        <TextBlock
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Center"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Foreground="Green"
+                            Text="{Binding CreationMessage}" />
 
-            <!-- Textboxes for New Subject Name and Description -->
-            <TextBox Text="{Binding NewSubjectName}" Watermark="Enter subject name" Width="250" HorizontalAlignment="Center"/>
-            <TextBox Text="{Binding NewSubjectDescription}" Watermark="Enter subject description" Width="250" Height="80" HorizontalAlignment="Center"/>
+                        <!--  Textboxes for New Subject Name and Description  -->
+                        <TextBox
+                            Width="250"
+                            HorizontalAlignment="Center"
+                            Text="{Binding NewSubjectName}"
+                            Watermark="Enter subject name" />
+                        <TextBox
+                            Width="250"
+                            Height="80"
+                            HorizontalAlignment="Center"
+                            Text="{Binding NewSubjectDescription}"
+                            Watermark="Enter subject description" />
 
-            <!-- Create Button -->
-            <Button Content="Create" Command="{Binding CreateSubjectCommand}" Margin="0,5,0,0" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Border>
-</Grid>
+                        <!--  Create Button  -->
+                        <Button
+                            Margin="0,5,0,0"
+                            HorizontalAlignment="Center"
+                            Command="{Binding CreateSubjectCommand}"
+                            Content="Create" />
+                    </StackPanel>
+                </Border>
+            </Grid>
 
         </StackPanel>
     </ScrollViewer>
