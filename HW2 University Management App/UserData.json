@@ -4,22 +4,14 @@
       "UserID": "jake",
       "UserPassword": "student123",
       "UserRole": "Student",
-      "EnrolledSubjects": [
-        "101",
-        "107"
-      ],
+      "EnrolledSubjects": [],
       "CreatedSubjects": []
     },
     {
       "UserID": "jonathan",
       "UserPassword": "j123",
       "UserRole": "Student",
-      "EnrolledSubjects": [
-        "101",
-        "102",
-        "103",
-        "105"
-      ],
+      "EnrolledSubjects": [],
       "CreatedSubjects": []
     },
     {
@@ -29,101 +21,21 @@
       "EnrolledSubjects": [],
       "CreatedSubjects": [
         "101",
-        "102",
-        "103",
-        "104",
         "105",
-        "106",
-        "107",
-        "108",
-        "109",
-        "110",
-        "111",
-        "112"
+        "102"
       ]
     }
   ],
   "Subjects": [
     {
       "SubjectID": "101",
-      "Name": "Math",
+      "Name": "math",
       "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jake",
-        "jonathan"
-      ]
+      "EnrolledStudents": []
     },
     {
       "SubjectID": "102",
-      "Name": "Physics",
-      "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jonathan"
-      ]
-    },
-    {
-      "SubjectID": "103",
-      "Name": "Biology",
-      "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jonathan"
-      ]
-    },
-    {
-      "SubjectID": "104",
-      "Name": "Chemistry",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "105",
-      "Name": "Sports",
-      "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jonathan"
-      ]
-    },
-    {
-      "SubjectID": "106",
-      "Name": "Computer",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "107",
-      "Name": "Spanish",
-      "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jake"
-      ]
-    },
-    {
-      "SubjectID": "108",
-      "Name": "JavaScript",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "109",
-      "Name": "Python",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "110",
-      "Name": "HTML",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "111",
-      "Name": "coding",
-      "TeacherID": "sarah",
-      "EnrolledStudents": []
-    },
-    {
-      "SubjectID": "112",
-      "Name": "testing123",
+      "Name": "ffff",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     }

@@ -1,10 +1,13 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using HW2_University_Management_App.ViewModels;
 
 namespace HW2_University_Management_App.Views
 {
     public partial class TeacherDashboardView : UserControl
     {
+        private TeacherDashboardViewModel ViewModel => (TeacherDashboardViewModel)DataContext;
+
         public TeacherDashboardView()
         {
             InitializeComponent();
@@ -12,20 +15,20 @@ namespace HW2_University_Management_App.Views
 
         private async void OpenDialog(object? sender, RoutedEventArgs e)
         {
-            // Determine the course action and set the appropriate message
             string message = string.Empty;
-            
-            // Example logic based on the sender button's content
-            if (sender is Button button)
+
+            // Check if the selected subject was created or deleted and set the message accordingly
+            if (ViewModel.SelectedExistingSubject != null)
             {
-                if (button.Content.ToString() == "Create Course")
-                {
-                    message = "Successfully created course!";
-                }
-                else if (button.Content.ToString() == "Delete Course")
-                {
-                    message = "Successfully deleted course!";
-                }
+                message = $"Successfully deleted {ViewModel.SelectedExistingSubject.Name}";
+            }
+            else if (ViewModel.NewlyCreatedSubject != null)
+            {
+                message = $"Successfully created {ViewModel.NewlyCreatedSubject.Name}";
+            }
+            else
+            {
+                message = "Action was not successful. Please try again.";
             }
 
             // Create the dialog and pass the message
