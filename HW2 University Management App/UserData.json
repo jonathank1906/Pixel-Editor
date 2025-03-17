@@ -20,22 +20,29 @@
       "UserRole": "Teacher",
       "EnrolledSubjects": [],
       "CreatedSubjects": [
-        "101",
         "105",
-        "102"
+        "101",
+        "102",
+        "103"
       ]
     }
   ],
   "Subjects": [
     {
       "SubjectID": "101",
-      "Name": "math",
+      "Name": "dfg",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     },
     {
       "SubjectID": "102",
-      "Name": "ffff",
+      "Name": "dsfsdf",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "103",
+      "Name": "dsfsdf",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     }
