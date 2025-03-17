@@ -53,28 +53,22 @@ namespace HW2_University_Management_App.ViewModels
         {
             if (!string.IsNullOrEmpty(NewSubjectName))
             {
-                // Call CreateSubject and assume it creates the subject without returning the ID
-                subjectService.CreateSubject(NewSubjectName, teacher.UserID);
+                // Get correct subject ID from SubjectService
+                string newSubjectId = subjectService.CreateSubject(NewSubjectName, teacher.UserID);
 
-                // Generate a new subject ID, or assume the backend assigns it
-                var newSubjectId = Guid.NewGuid().ToString(); // For example, you can use a GUID if the backend doesn't return an ID
+                // Reload subjects from the JSON file
+                LoadSubjects();
 
-                // Create the ColoredSubject with a random background color
-                var newSubject = new ColoredSubject(newSubjectId, NewSubjectName, ColorStyles.GetRandomColor());
+                // Show success message
+                CreationMessage = $"Successfully created the subject: {NewSubjectName}";
 
-                // Add the new subject to the CreatedSubjects collection
-                CreatedSubjects.Add(newSubject);
-
-                // Reset the input field for new subject name
+                // Reset input field
                 NewSubjectName = "";
 
-                // Set the creation message to be displayed in the UI
-                CreationMessage = $"Successfully created the subject: {newSubject.Name}";
-
-                // Call ClearCreationMessageAfterDelay to clear the message after a delay
                 await ClearCreationMessageAfterDelay();
             }
         }
+
 
         [RelayCommand]
         private async Task DeleteSubject()
@@ -83,20 +77,22 @@ namespace HW2_University_Management_App.ViewModels
             {
                 // Store deleted subject before removing it
                 var deletedSubject = SelectedExistingSubject;
+                // Get selected subject ID
+                string subjectIdToDelete = SelectedExistingSubject.SubjectID;
 
-                // Delete the subject
-                subjectService.DeleteSubject(deletedSubject.SubjectID);
+                // 🔹 Delete from JSON
+                subjectService.DeleteSubject(subjectIdToDelete);
 
-                // Remove it from the list
-                CreatedSubjects.Remove(deletedSubject);
+                // Reload subjects from the JSON file to ensure sync
+                LoadSubjects();
 
-                // Reset selection
-                SelectedExistingSubject = null;
 
                 // Set the deletion message to be displayed in the UI
                 CreationMessage = $"Successfully deleted the subject: {deletedSubject.Name}";
 
-                // Call ClearCreationMessageAfterDelay to clear the message after a delay
+                // Reset selection
+                SelectedExistingSubject = null;
+
                 await ClearCreationMessageAfterDelay();
             }
             else
@@ -104,6 +100,7 @@ namespace HW2_University_Management_App.ViewModels
                 CreationMessage = string.Empty; // If no subject was selected, clear the message
             }
         }
+
 
         private async Task ClearCreationMessageAfterDelay()
         {

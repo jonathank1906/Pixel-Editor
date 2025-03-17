@@ -10,7 +10,7 @@ namespace HW2_University_Management_App.Services
 {
     public class SubjectService
     {
-        private const string DatabaseFile = "UserData.json"; 
+        private const string DatabaseFile = "UserData.json";
         private List<Subject> subjects;
         private List<User> users;
 
@@ -91,29 +91,45 @@ namespace HW2_University_Management_App.Services
         }
 
         // 🔹 Create a New Subject
-        public void CreateSubject(string name, string teacherId)
-        {
-            string newId = (subjects.Count + 101).ToString(); // Generate simple ID
-            var newSubject = new Subject { SubjectID = newId, Name = name, TeacherID = teacherId, EnrolledStudents = new List<string>() };
-            subjects.Add(newSubject);
+       public string CreateSubject(string name, string teacherId)
+{
+    string newId = Guid.NewGuid().ToString(); // Generate ID inside service
 
-            var teacher = users.FirstOrDefault(u => u.UserID == teacherId && u.UserRole == "Teacher");
-            if (teacher != null)
-            {
-                teacher.CreatedSubjects.Add(newId);
-            }
+    var newSubject = new Subject 
+    { 
+        SubjectID = newId, 
+        Name = name, 
+        TeacherID = teacherId, 
+        EnrolledStudents = new List<string>() 
+    };
 
-            SaveData();
-        }
+    subjects.Add(newSubject);
+
+    var teacher = users.FirstOrDefault(u => u.UserID == teacherId && u.UserRole == "Teacher");
+    if (teacher != null)
+    {
+        teacher.CreatedSubjects.Add(newId);
+    }
+
+    SaveData();
+    return newId;  // Return the correct ID
+}
+
+
 
         // 🔹 Delete a Subject
+        // 🔹 Delete a Subject (Updated)
         public void DeleteSubject(string subjectId)
         {
-            var subject = subjects.FirstOrDefault(s => s.SubjectID == subjectId);
-            if (subject != null)
+            Debug.WriteLine($"Attempting to delete subject: {subjectId}");
+
+            // 🔹 Find subject in memory
+            var subjectToRemove = subjects.FirstOrDefault(s => s.SubjectID == subjectId);
+
+            if (subjectToRemove != null)
             {
-                subjects.RemoveAll(s => s.SubjectID == subjectId);
-                
+                subjects.Remove(subjectToRemove);
+
                 foreach (var student in users.Where(u => u.UserRole == "Student"))
                 {
                     student.EnrolledSubjects.Remove(subjectId);
@@ -126,8 +142,16 @@ namespace HW2_University_Management_App.Services
                 }
 
                 SaveData();
+                LoadData(); // 🔥 Force reload to ensure the deletion is reflected properly
+
+                Debug.WriteLine($"Deleted Subject: {subjectId}");
+            }
+            else
+            {
+                Debug.WriteLine($"Subject NOT found for deletion: {subjectId}");
             }
         }
+
     }
 
     public class Database
