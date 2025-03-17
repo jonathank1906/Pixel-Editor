@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using HW2_University_Management_App.Models;
@@ -21,10 +20,10 @@ namespace HW2_University_Management_App.ViewModels
         private string newSubjectName;
 
         [ObservableProperty]
-        private ColoredSubject selectedExistingSubject; // The subject selected for deletion
+        private string newSubjectDescription; // 🔹 Added description field
 
         [ObservableProperty]
-        private ColoredSubject newlyCreatedSubject; // The newly created subject
+        private ColoredSubject selectedExistingSubject; // The subject selected for deletion
 
         [ObservableProperty]
         private string creationMessage; // The message to display after creating or deleting a subject
@@ -36,46 +35,58 @@ namespace HW2_University_Management_App.ViewModels
             LoadSubjects();
         }
 
+        /// <summary>
+        /// Loads subjects from the JSON file and populates the UI list.
+        /// </summary>
         private void LoadSubjects()
         {
             CreatedSubjects.Clear();
 
-            var teacherSubjects = subjectService.GetSubjects().Where(s => s.TeacherID == teacher.UserID);
+            var teacherSubjects = subjectService.GetSubjects()
+                .Where(s => s.TeacherID == teacher.UserID);
+
             foreach (var subject in teacherSubjects)
             {
                 var color = ColorStyles.GetRandomColor();
-                CreatedSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, color));
+                CreatedSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color));
             }
         }
 
+        /// <summary>
+        /// Command to create a new subject with name & description.
+        /// </summary>
         [RelayCommand]
         private async Task CreateSubject()
         {
-            if (!string.IsNullOrEmpty(NewSubjectName))
+            if (!string.IsNullOrEmpty(NewSubjectName) && !string.IsNullOrEmpty(NewSubjectDescription))
             {
-                // Get correct subject ID from SubjectService
-                string newSubjectId = subjectService.CreateSubject(NewSubjectName, teacher.UserID);
+                // 🔹 Create the subject with description
+                string newSubjectId = subjectService.CreateSubject(NewSubjectName, NewSubjectDescription, teacher.UserID);
 
-                // Reload subjects from the JSON file
+                // Reload subjects from JSON to reflect changes
                 LoadSubjects();
 
-                // Show success message
-                CreationMessage = $"Successfully created the subject: {NewSubjectName}";
+              
 
-                // Reset input field
+                // Show success message
+                CreationMessage = $"Successfully created: {NewSubjectName}";
+                  // Reset input fields
                 NewSubjectName = "";
+                NewSubjectDescription = "";
 
                 await ClearCreationMessageAfterDelay();
             }
         }
 
-
+        /// <summary>
+        /// Command to delete the selected subject.
+        /// </summary>
         [RelayCommand]
         private async Task DeleteSubject()
         {
             if (SelectedExistingSubject != null)
             {
-                // Store deleted subject before removing it
+             
                 var deletedSubject = SelectedExistingSubject;
                 // Get selected subject ID
                 string subjectIdToDelete = SelectedExistingSubject.SubjectID;
@@ -83,15 +94,14 @@ namespace HW2_University_Management_App.ViewModels
                 // 🔹 Delete from JSON
                 subjectService.DeleteSubject(subjectIdToDelete);
 
-                // Reload subjects from the JSON file to ensure sync
+                // Reload subjects from JSON to ensure sync
                 LoadSubjects();
-
-
-                // Set the deletion message to be displayed in the UI
-                CreationMessage = $"Successfully deleted the subject: {deletedSubject.Name}";
 
                 // Reset selection
                 SelectedExistingSubject = null;
+
+                // Set the deletion message to be displayed in the UI
+                CreationMessage = $"Successfully deleted the subject: {deletedSubject.Name}";
 
                 await ClearCreationMessageAfterDelay();
             }
@@ -101,7 +111,9 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
-
+        /// <summary>
+        /// Clears the creation message after 3 seconds.
+        /// </summary>
         private async Task ClearCreationMessageAfterDelay()
         {
             await Task.Delay(3000); // Delay of 3 seconds

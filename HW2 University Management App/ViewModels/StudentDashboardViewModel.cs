@@ -5,12 +5,8 @@ using System.Linq;
 using HW2_University_Management_App.Models;
 using HW2_University_Management_App.Services;
 using HW2_University_Management_App.Styles;
-using Avalonia.Controls;
 using System.Collections.ObjectModel;
 using System;
-using System.Diagnostics;
-using System.Windows.Input;
-using Avalonia.Input;
 
 namespace HW2_University_Management_App.ViewModels
 {
@@ -38,6 +34,9 @@ namespace HW2_University_Management_App.ViewModels
             LoadSubjects();
         }
 
+        /// <summary>
+        /// Loads subjects from the JSON file and assigns them to Available or Enrolled lists.
+        /// </summary>
         private void LoadSubjects()
         {
             var subjects = subjectService.GetSubjects();
@@ -46,20 +45,25 @@ namespace HW2_University_Management_App.ViewModels
             {
                 var color = ColorStyles.GetRandomColor();
 
-                // Create ColoredSubject with SubjectID
+                // 🔹 Ensure ColoredSubject includes the subject description
+                var coloredSubject = new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color);
+
                 if (student.EnrolledSubjects.Contains(subject.SubjectID))
-                    EnrolledSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, color));
+                    EnrolledSubjects.Add(coloredSubject);
                 else
-                    AvailableSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, color));
+                    AvailableSubjects.Add(coloredSubject);
             }
         }
 
+        /// <summary>
+        /// Command to enroll the student in a selected subject.
+        /// </summary>
         [RelayCommand]
         private void EnrollInSubject()
         {
             if (SelectedAvailableSubject != null)
             {
-                student.EnrolledSubjects.Add(SelectedAvailableSubject.SubjectID);  // Use SubjectID for enrollment
+                student.EnrolledSubjects.Add(SelectedAvailableSubject.SubjectID);
                 subjectService.EnrollStudent(student.UserID, SelectedAvailableSubject.SubjectID);
 
                 EnrolledSubjects.Add(SelectedAvailableSubject);
@@ -69,38 +73,40 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command to drop an enrolled subject.
+        /// </summary>
         [RelayCommand]
         private void DropSubject()
         {
             if (SelectedEnrolledSubject != null)
             {
-                // Remove the SubjectID from the student's enrolled subjects
                 student.EnrolledSubjects.Remove(SelectedEnrolledSubject.SubjectID);
-
-                // Drop the student from the subject in the service (using SubjectID)
                 subjectService.DropStudent(student.UserID, SelectedEnrolledSubject.SubjectID);
 
-                // Move the subject back to AvailableSubjects
                 AvailableSubjects.Add(SelectedEnrolledSubject);
                 EnrolledSubjects.Remove(SelectedEnrolledSubject);
 
-                // Save data after dropping the subject
-                subjectService.SaveData();
+                subjectService.SaveData();  // Save data after dropping the subject
             }
         }
 
+        /// <summary>
+        /// Handles clicking on a subject (for future features).
+        /// </summary>
         [RelayCommand]
         public void OnSubjectClicked(ColoredSubject subject)
         {
-           
+            // Future implementation (e.g., show subject details)
         }
 
-        // Method to deselect both selected subjects
+        /// <summary>
+        /// Deselects any selected subject.
+        /// </summary>
         public void DeselectSubject()
         {
             SelectedEnrolledSubject = null;
             SelectedAvailableSubject = null;
         }
-
     }
 }

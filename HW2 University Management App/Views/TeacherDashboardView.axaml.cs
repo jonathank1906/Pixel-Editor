@@ -12,7 +12,5 @@ namespace HW2_University_Management_App.Views
         {
             InitializeComponent();
         }
-
-        // The OpenDialog method and GetWindow method are no longer needed, so they have been removed.
     }
 }

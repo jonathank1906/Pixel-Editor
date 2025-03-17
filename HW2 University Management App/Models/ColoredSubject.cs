@@ -1,19 +1,17 @@
 using Avalonia.Media;
 
-namespace HW2_University_Management_App.Models
+public class ColoredSubject
 {
-    public class ColoredSubject
-    {
-        public string SubjectID { get; set; }  
-        public string Name { get; set; }
-        public SolidColorBrush BackgroundColor { get; set; }
+    public string SubjectID { get; }
+    public string Name { get; }
+    public string Description { get; } // 🔹 Added Description
+    public SolidColorBrush BackgroundColor { get; }
 
-        // Constructor
-        public ColoredSubject(string subjectID, string name, SolidColorBrush color)
-        {
-            SubjectID = subjectID;  
-            Name = name;
-            BackgroundColor = color;
-        }
+    public ColoredSubject(string id, string name, string description, SolidColorBrush color)
+    {
+        SubjectID = id;
+        Name = name;
+        Description = description;
+        BackgroundColor = color;
     }
 }
