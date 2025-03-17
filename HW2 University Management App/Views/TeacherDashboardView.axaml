@@ -91,57 +91,111 @@
                 Command="{Binding DeleteSubjectCommand}"
                 Content="Delete Selected Subject" />
 
-            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-                <!--  Rounded background container with light grey color  -->
-                <Border
-                    Padding="20"
+            <StackPanel
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Spacing="10">
+
+                <!--  Update Details Button  -->
+                <Button
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ToggleEditModeCommand}"
+                    Content="Update Details" />
+
+                <!--  Create New Subject Section (Visible when NOT Editing)  -->
+                <Grid
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Background="LightGray"
-                    CornerRadius="10">
-                    <StackPanel
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Spacing="10">
-                        <!--  Create New Subject  -->
-                        <TextBlock
-                            Margin="0,20,0,5"
+                    IsVisible="{Binding IsEditingMode, Converter={StaticResource InverseBooleanConverter}}">
+                    <Border
+                        Padding="20"
+                        Background="LightGray"
+                        CornerRadius="10">
+                        <StackPanel
                             HorizontalAlignment="Center"
-                            FontSize="18"
-                            FontWeight="SemiBold"
-                            Text="➕ Create a New Subject" />
+                            VerticalAlignment="Center"
+                            Spacing="10">
+                            <TextBlock
+                                Margin="0,20,0,5"
+                                HorizontalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="➕ Create a New Subject" />
+                            <TextBlock
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Foreground="Green"
+                                Text="{Binding CreationMessage}" />
+                            <TextBox
+                                Width="250"
+                                HorizontalAlignment="Center"
+                                Text="{Binding NewSubjectName}"
+                                Watermark="Enter subject name" />
+                            <TextBox
+                                Width="250"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                Text="{Binding NewSubjectDescription}"
+                                Watermark="Enter subject description" />
+                            <Button
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding CreateSubjectCommand}"
+                                Content="Create" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-                        <!--  Message Area  -->
-                        <TextBlock
-                            Margin="0,10,0,0"
+                <!--  Edit Details Section (Visible when Editing)  -->
+                <Grid
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding IsEditingMode}">
+                    <Border
+                        Padding="20"
+                        Background="LightGray"
+                        CornerRadius="10">
+                        <StackPanel
                             HorizontalAlignment="Center"
-                            FontSize="12"
-                            FontWeight="SemiBold"
-                            Foreground="Green"
-                            Text="{Binding CreationMessage}" />
+                            VerticalAlignment="Center"
+                            Spacing="10">
+                            <TextBlock
+                                Margin="0,20,0,5"
+                                HorizontalAlignment="Center"
+                                FontSize="18"
+                                FontWeight="SemiBold"
+                                Text="✏️ Edit Subject Details" />
+                            <TextBlock
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Center"
+                                FontSize="12"
+                                FontWeight="SemiBold"
+                                Foreground="Blue"
+                                Text="Update the subject details" />
+                            <TextBox
+                                Width="250"
+                                HorizontalAlignment="Center"
+                                Text="{Binding NewSubjectName}"
+                                Watermark="Edit subject name" />
+                            <TextBox
+                                Width="250"
+                                Height="80"
+                                HorizontalAlignment="Center"
+                                Text="{Binding NewSubjectDescription}"
+                                Watermark="Edit subject description" />
+                            <Button
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Center"
+                                Command="{Binding SaveSubjectCommand}"
+                                Content="Save" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
 
-                        <!--  Textboxes for New Subject Name and Description  -->
-                        <TextBox
-                            Width="250"
-                            HorizontalAlignment="Center"
-                            Text="{Binding NewSubjectName}"
-                            Watermark="Enter subject name" />
-                        <TextBox
-                            Width="250"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Text="{Binding NewSubjectDescription}"
-                            Watermark="Enter subject description" />
-
-                        <!--  Create Button  -->
-                        <Button
-                            Margin="0,5,0,0"
-                            HorizontalAlignment="Center"
-                            Command="{Binding CreateSubjectCommand}"
-                            Content="Create" />
-                    </StackPanel>
-                </Border>
-            </Grid>
+            </StackPanel>
 
         </StackPanel>
     </ScrollViewer>

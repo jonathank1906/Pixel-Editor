@@ -147,6 +147,20 @@ namespace HW2_University_Management_App.Services
                 Debug.WriteLine($"Subject NOT found for deletion: {subjectId}");
             }
         }
+
+        // 🔹 Update an Existing Subject
+        public void UpdateSubject(string subjectId, string newName, string newDescription)
+        {
+            var subjectToUpdate = subjects.FirstOrDefault(s => s.SubjectID == subjectId);
+            if (subjectToUpdate != null)
+            {
+                subjectToUpdate.Name = newName;
+                subjectToUpdate.Description = newDescription;
+
+                SaveData(); // 🔥 Save changes to JSON
+            }
+        }
+
     }
 
     public class Database

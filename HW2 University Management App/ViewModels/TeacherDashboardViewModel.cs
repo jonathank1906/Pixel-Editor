@@ -28,6 +28,9 @@ namespace HW2_University_Management_App.ViewModels
         [ObservableProperty]
         private string creationMessage; // The message to display after creating or deleting a subject
 
+        [ObservableProperty]
+        private bool isEditingMode;
+
         public TeacherDashboardViewModel(User teacher)
         {
             this.teacher = teacher;
@@ -53,6 +56,54 @@ namespace HW2_University_Management_App.ViewModels
         }
 
         /// <summary>
+        /// Toggles between Create and Edit mode.
+        /// </summary>
+        [RelayCommand]
+        private void ToggleEditMode()
+        {
+            if (SelectedExistingSubject != null)
+            {
+                // 🔹 Load selected subject details into input fields
+                NewSubjectName = SelectedExistingSubject.Name;
+                NewSubjectDescription = SelectedExistingSubject.Description;
+                IsEditingMode = true;
+            }
+            else
+            {
+                IsEditingMode = false;
+            }
+        }
+
+        /// <summary>
+        /// Saves the updated subject details.
+        /// </summary>
+        [RelayCommand]
+        private async Task SaveSubject()
+        {
+            if (SelectedExistingSubject != null && !string.IsNullOrEmpty(NewSubjectName) && !string.IsNullOrEmpty(NewSubjectDescription))
+            {
+                // 🔹 Update the existing subject
+                subjectService.UpdateSubject(SelectedExistingSubject.SubjectID, NewSubjectName, NewSubjectDescription);
+
+                // Reload subjects to reflect changes
+                LoadSubjects();
+
+                // Reset editing state
+                IsEditingMode = false;
+                SelectedExistingSubject = null;
+
+                // Show success message
+                CreationMessage = $"Successfully updated: {NewSubjectName}";
+
+                // Reset input fields
+                NewSubjectName = "";
+                NewSubjectDescription = "";
+
+                await ClearCreationMessageAfterDelay();
+            }
+        }
+
+        /// <summary>
         /// Command to create a new subject with name & description.
         /// </summary>
         [RelayCommand]
@@ -66,13 +117,14 @@ namespace HW2_University_Management_App.ViewModels
                 // Reload subjects from JSON to reflect changes
                 LoadSubjects();
 
-              
-
                 // Show success message
                 CreationMessage = $"Successfully created: {NewSubjectName}";
-                  // Reset input fields
+                // Reset input fields
                 NewSubjectName = "";
                 NewSubjectDescription = "";
+
+                // Reset editing state
+                IsEditingMode = false;
 
                 await ClearCreationMessageAfterDelay();
             }
@@ -86,7 +138,6 @@ namespace HW2_University_Management_App.ViewModels
         {
             if (SelectedExistingSubject != null)
             {
-             
                 var deletedSubject = SelectedExistingSubject;
                 // Get selected subject ID
                 string subjectIdToDelete = SelectedExistingSubject.SubjectID;
@@ -102,6 +153,9 @@ namespace HW2_University_Management_App.ViewModels
 
                 // Set the deletion message to be displayed in the UI
                 CreationMessage = $"Successfully deleted the subject: {deletedSubject.Name}";
+
+                // Reset editing state
+                IsEditingMode = false;
 
                 await ClearCreationMessageAfterDelay();
             }
