@@ -4,7 +4,10 @@
       "UserID": "jake",
       "UserPassword": "student123",
       "UserRole": "Student",
-      "EnrolledSubjects": [],
+      "EnrolledSubjects": [
+        "101",
+        "102"
+      ],
       "CreatedSubjects": []
     },
     {
@@ -20,29 +23,60 @@
       "UserRole": "Teacher",
       "EnrolledSubjects": [],
       "CreatedSubjects": [
-        "105",
         "101",
         "102",
-        "103"
+        "103",
+        "104",
+        "105",
+        "106",
+        "107"
       ]
     }
   ],
   "Subjects": [
     {
       "SubjectID": "101",
-      "Name": "dfg",
+      "Name": "Math",
       "TeacherID": "sarah",
-      "EnrolledStudents": []
+      "EnrolledStudents": [
+        "jake"
+      ]
     },
     {
       "SubjectID": "102",
-      "Name": "dsfsdf",
+      "Name": "Physics",
+      "TeacherID": "sarah",
+      "EnrolledStudents": [
+        "jake"
+      ]
+    },
+    {
+      "SubjectID": "103",
+      "Name": "Python",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     },
     {
-      "SubjectID": "103",
-      "Name": "dsfsdf",
+      "SubjectID": "104",
+      "Name": "HTML",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "105",
+      "Name": "C#",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "106",
+      "Name": "Java",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "107",
+      "Name": "React",
       "TeacherID": "sarah",
       "EnrolledStudents": []
     }

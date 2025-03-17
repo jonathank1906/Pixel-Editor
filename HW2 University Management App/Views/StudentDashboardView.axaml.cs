@@ -31,7 +31,7 @@ namespace HW2_University_Management_App.Views
             }
             else
             {
-                message = "Action was not successful. Please try again.";
+                message = "Action was not successful.";
             }
             // Create and show the dialog with the course name message
             var dialog = new DialogWindow(message);
