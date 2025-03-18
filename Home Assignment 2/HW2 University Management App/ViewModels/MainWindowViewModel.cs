@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using HW2_University_Management_App.Models;
 using HW2_University_Management_App.Services;
-using HW2_University_Management_App.ViewModels.AdminMainPage;
 using HW2_University_Management_App.Views;
 using ReactiveUI;
 using System.Collections.ObjectModel;
@@ -32,16 +31,7 @@ namespace HW2_University_Management_App.ViewModels
             window.Close();
         }
 
-        [RelayCommand]
-        private void GoHome()
-        {
-            if (userName.UserRole == "Admin")
-            {
-                window.Width = 800;
-                window.Height = 450;
-                CurrentContent = new AdminView() { DataContext = new AdminMainPageViewModel(this) };
-            }
-        }
+      
 
         public MainWindowViewModel(User item, Window window)
         {
