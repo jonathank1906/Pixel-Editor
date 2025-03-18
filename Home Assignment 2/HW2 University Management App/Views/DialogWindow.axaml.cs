@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using HW2_University_Management_App.ViewModels;
 
-
 namespace HW2_University_Management_App.Views;
 
 public partial class DialogWindow : Window

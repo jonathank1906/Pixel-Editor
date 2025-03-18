@@ -9,6 +9,6 @@ public partial class LoginWindow : Window, ICloseble
     public LoginWindow()
     {
         InitializeComponent();
-         DataContext = new LoginWindowViewModel(this);
+        DataContext = new LoginWindowViewModel(this);
     }
 }
