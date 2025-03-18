@@ -19,6 +19,12 @@ namespace HW2_University_Management_App.ViewModels
         public ObservableCollection<ColoredSubject> EnrolledSubjects { get; set; }
         public ObservableCollection<ColoredSubject> AvailableSubjects { get; set; }
 
+        private ObservableCollection<ColoredSubject> allEnrolledSubjects;
+        private ObservableCollection<ColoredSubject> allAvailableSubjects;
+
+        [ObservableProperty]
+        private string searchQuery = "";
+
         [ObservableProperty]
         private ColoredSubject selectedAvailableSubject;
 
@@ -30,6 +36,8 @@ namespace HW2_University_Management_App.ViewModels
             this.student = student;
             EnrolledSubjects = new ObservableCollection<ColoredSubject>();
             AvailableSubjects = new ObservableCollection<ColoredSubject>();
+            allEnrolledSubjects = new ObservableCollection<ColoredSubject>();
+            allAvailableSubjects = new ObservableCollection<ColoredSubject>();
 
             LoadSubjects();
         }
@@ -53,11 +61,25 @@ namespace HW2_University_Management_App.ViewModels
                 else
                     AvailableSubjects.Add(coloredSubject);
             }
+            UpdateFilteredSubjects();
         }
 
         /// <summary>
         /// Command to enroll the student in a selected subject.
         /// </summary>
+        // 
+        [RelayCommand]
+        private void UpdateFilteredSubjects()
+        {
+            EnrolledSubjects.Clear();
+            AvailableSubjects.Clear();
+
+            foreach (var subject in allEnrolledSubjects.Where(s => s.Name.Contains(SearchQuery, System.StringComparison.OrdinalIgnoreCase)))
+                EnrolledSubjects.Add(subject);
+
+            foreach (var subject in allAvailableSubjects.Where(s => s.Name.Contains(SearchQuery, System.StringComparison.OrdinalIgnoreCase)))
+                AvailableSubjects.Add(subject);
+        }       
         [RelayCommand]
         private void EnrollInSubject()
         {

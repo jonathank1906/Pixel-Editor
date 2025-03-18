@@ -15,6 +15,10 @@ namespace HW2_University_Management_App.ViewModels
         private readonly User teacher;
 
         public ObservableCollection<ColoredSubject> CreatedSubjects { get; set; }
+        private ObservableCollection<ColoredSubject> allCreatedSubjects;
+        
+        [ObservableProperty]
+        private string searchQuery = "";
 
         [ObservableProperty]
         private string newSubjectName;
@@ -35,6 +39,8 @@ namespace HW2_University_Management_App.ViewModels
         {
             this.teacher = teacher;
             CreatedSubjects = new ObservableCollection<ColoredSubject>();
+            allCreatedSubjects = new ObservableCollection<ColoredSubject>();
+
             LoadSubjects();
         }
 
@@ -53,11 +59,21 @@ namespace HW2_University_Management_App.ViewModels
                 var color = ColorStyles.GetRandomColor();
                 CreatedSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color));
             }
+             UpdateFilteredSubjects();
         }
 
         /// <summary>
         /// Toggles between Create and Edit mode.
         /// </summary>
+        /// 
+        [RelayCommand]
+
+         private void UpdateFilteredSubjects()
+        {
+            CreatedSubjects.Clear();
+            foreach (var subject in allCreatedSubjects.Where(s => s.Name.Contains(SearchQuery, System.StringComparison.OrdinalIgnoreCase)))
+                CreatedSubjects.Add(subject);
+        }
         [RelayCommand]
         private void ToggleEditMode()
         {
