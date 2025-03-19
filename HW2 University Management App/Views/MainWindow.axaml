@@ -34,6 +34,18 @@
 				<ColumnDefinition Width="30"/>
 				<ColumnDefinition Width="30"/>
 			</Grid.ColumnDefinitions>
+
+			 <!-- Logo -->
+
+			 <!-- App Name -->
+            <TextBlock Text="ItsStudying"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="5,0,0,0"
+                       Grid.Column="1"/>
+
 			
 	
 			<!-- Logout button -->

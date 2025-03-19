@@ -37,9 +37,9 @@ namespace HW2_University_Management_App.ViewModels
             LoadSubjects();
         }
 
-        /// <summary>
+        
         /// Loads subjects from the JSON file and assigns them to Available or Enrolled lists.
-        /// </summary>
+        
         private void LoadSubjects()
         {
             var subjects = subjectService.GetSubjects();
@@ -58,9 +58,9 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
-        /// <summary>
+        
         /// Filters subjects based on the search query.
-        /// </summary>
+       
         [RelayCommand]
         private void SearchSubjects()
         {
@@ -117,18 +117,18 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
     
-        /// <summary>
+        
         /// Handles clicking on a subject (for future features).
-        /// </summary>
+        
         [RelayCommand]
         public void OnSubjectClicked(ColoredSubject subject)
         {
             // Future implementation (e.g., show subject details)
         }
 
-        /// <summary>
+        
         /// Deselects any selected subject.
-        /// </summary>
+        
         public void DeselectSubject()
         {
             SelectedEnrolledSubject = null;

@@ -42,9 +42,9 @@ namespace HW2_University_Management_App.ViewModels
             LoadSubjects();
         }
 
-        /// <summary>
+        
         /// Loads subjects from the JSON file and populates the UI list.
-        /// </summary>
+        
         private void LoadSubjects()
         {
             CreatedSubjects.Clear();
@@ -59,9 +59,9 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
-        /// <summary>
+        
         /// Filters subjects based on the search query.
-        /// </summary>
+        
         [RelayCommand]
         private void SearchSubjects()
         {
