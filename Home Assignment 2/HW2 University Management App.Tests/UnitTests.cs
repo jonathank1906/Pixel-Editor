@@ -1,15 +1,11 @@
-﻿using Moq;
-using Xunit;
-using HW2_University_Management_App.ViewModels;
-using HW2_University_Management_App.Services;
+﻿using System.IO;
+using System.Text.Json;
 using HW2_University_Management_App.Models;
-using System.Threading.Tasks;
-using Avalonia.Controls;
+using HW2_University_Management_App.Services;
+using Xunit;
 
-namespace HW2_University_Management_App.Tests
+namespace HW2_University_Management_App.Tests;
+public class SubjectServiceTests
 {
-    public class LoginWindowViewModelTests
-    {
-     
-    }
+
 }

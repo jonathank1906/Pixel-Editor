@@ -32,6 +32,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBox
+                x:Name="UsernameTextBox"
                 Width="200"
                 Height="20"
                 Text="{Binding Username}"
@@ -43,6 +44,7 @@
                 FontSize="20"
                 Foreground="Black" />
             <TextBox
+                x:Name="PasswordBox"
                 Width="200"
                 Height="20"
                 PasswordChar="*"
@@ -56,6 +58,7 @@
                 Text="{Binding ErrorMessage}" />
 
             <Button
+                x:Name="LoginButton"
                 Width="150"
                 Height="35"
                 Margin="0,20,0,0"
