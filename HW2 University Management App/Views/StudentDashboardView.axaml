@@ -13,10 +13,10 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-    <TextBox Width="200" Height="30"
-             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
-    <Button Width="50" Height="30" Content="🔍" Command="{Binding SearchSubjectsCommand}" />
-</StackPanel>
+                <TextBox Width="200" Height="30" Watermark="Search for subjects..."
+                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
+                 <Button Width="50" Height="30" Content=" 🔍" Command="{Binding SearchSubjectsCommand}" />
+            </StackPanel>
 
             <TextBlock
                 Margin="0,0,0,10"

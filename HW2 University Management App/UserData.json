@@ -4,7 +4,9 @@
       "UserID": "jake",
       "UserPassword": "student123",
       "UserRole": "Student",
-      "EnrolledSubjects": [],
+      "EnrolledSubjects": [
+        "533d6ab5-4cf9-4cde-8be4-b6526a51ebb7"
+      ],
       "CreatedSubjects": []
     },
     {
@@ -24,7 +26,8 @@
       "EnrolledSubjects": [],
       "CreatedSubjects": [
         "85b0a909-562e-4020-860b-69ab74b659b0",
-        "6f43f0ed-b7d9-4885-b314-78ebed2fa1e6"
+        "6f43f0ed-b7d9-4885-b314-78ebed2fa1e6",
+        "533d6ab5-4cf9-4cde-8be4-b6526a51ebb7"
       ]
     }
   ],
@@ -45,6 +48,15 @@
       "TeacherID": "sarah",
       "EnrolledStudents": [
         "jonathan"
+      ]
+    },
+    {
+      "SubjectID": "533d6ab5-4cf9-4cde-8be4-b6526a51ebb7",
+      "Name": "Food",
+      "Description": "Kebab",
+      "TeacherID": "sarah",
+      "EnrolledStudents": [
+        "jake"
       ]
     }
   ]
