@@ -6,6 +6,7 @@ using HW2_University_Management_App.Services;
 using HW2_University_Management_App.Styles;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 
 namespace HW2_University_Management_App.ViewModels
 {
@@ -15,32 +16,29 @@ namespace HW2_University_Management_App.ViewModels
         private readonly User teacher;
 
         public ObservableCollection<ColoredSubject> CreatedSubjects { get; set; }
-        private ObservableCollection<ColoredSubject> allCreatedSubjects;
-        
-        [ObservableProperty]
-        private string searchQuery = "";
 
         [ObservableProperty]
         private string newSubjectName;
 
         [ObservableProperty]
-        private string newSubjectDescription; // 🔹 Added description field
+        private string newSubjectDescription;
 
         [ObservableProperty]
-        private ColoredSubject selectedExistingSubject; // The subject selected for deletion
+        private ColoredSubject selectedExistingSubject;
 
         [ObservableProperty]
-        private string creationMessage; // The message to display after creating or deleting a subject
+        private string creationMessage;
 
         [ObservableProperty]
         private bool isEditingMode;
+
+        [ObservableProperty]
+        private string searchQuery = "";
 
         public TeacherDashboardViewModel(User teacher)
         {
             this.teacher = teacher;
             CreatedSubjects = new ObservableCollection<ColoredSubject>();
-            allCreatedSubjects = new ObservableCollection<ColoredSubject>();
-
             LoadSubjects();
         }
 
@@ -59,27 +57,31 @@ namespace HW2_University_Management_App.ViewModels
                 var color = ColorStyles.GetRandomColor();
                 CreatedSubjects.Add(new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color));
             }
-             UpdateFilteredSubjects();
         }
 
         /// <summary>
-        /// Toggles between Create and Edit mode.
+        /// Filters subjects based on the search query.
         /// </summary>
-        /// 
         [RelayCommand]
-
-         private void UpdateFilteredSubjects()
+        private void SearchSubjects()
         {
+            var teacherSubjects = subjectService.GetSubjects()
+                .Where(s => s.TeacherID == teacher.UserID &&
+                            s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase))
+                .Select(s => new ColoredSubject(s.SubjectID, s.Name, s.Description, ColorStyles.GetRandomColor()));
+
             CreatedSubjects.Clear();
-            foreach (var subject in allCreatedSubjects.Where(s => s.Name.Contains(SearchQuery, System.StringComparison.OrdinalIgnoreCase)))
-                CreatedSubjects.Add(subject);
+            foreach (var sub in teacherSubjects)
+            {
+                CreatedSubjects.Add(sub);
+            }
         }
+
         [RelayCommand]
         private void ToggleEditMode()
         {
             if (SelectedExistingSubject != null)
             {
-                // 🔹 Load selected subject details into input fields
                 NewSubjectName = SelectedExistingSubject.Name;
                 NewSubjectDescription = SelectedExistingSubject.Description;
                 IsEditingMode = true;
@@ -90,104 +92,56 @@ namespace HW2_University_Management_App.ViewModels
             }
         }
 
-        /// <summary>
-        /// Saves the updated subject details.
-        /// </summary>
         [RelayCommand]
         private async Task SaveSubject()
         {
             if (SelectedExistingSubject != null && !string.IsNullOrEmpty(NewSubjectName) && !string.IsNullOrEmpty(NewSubjectDescription))
             {
-                // 🔹 Update the existing subject
                 subjectService.UpdateSubject(SelectedExistingSubject.SubjectID, NewSubjectName, NewSubjectDescription);
-
-                // Reload subjects to reflect changes
                 LoadSubjects();
-
-                // Reset editing state
                 IsEditingMode = false;
                 SelectedExistingSubject = null;
-
-                // Show success message
                 CreationMessage = $"Successfully updated: {NewSubjectName}";
-
-                // Reset input fields
                 NewSubjectName = "";
                 NewSubjectDescription = "";
-
                 await ClearCreationMessageAfterDelay();
             }
         }
 
-        /// <summary>
-        /// Command to create a new subject with name & description.
-        /// </summary>
         [RelayCommand]
         private async Task CreateSubject()
         {
             if (!string.IsNullOrEmpty(NewSubjectName) && !string.IsNullOrEmpty(NewSubjectDescription))
             {
-                // 🔹 Create the subject with description
-                string newSubjectId = subjectService.CreateSubject(NewSubjectName, NewSubjectDescription, teacher.UserID);
-
-                // Reload subjects from JSON to reflect changes
+                subjectService.CreateSubject(NewSubjectName, NewSubjectDescription, teacher.UserID);
                 LoadSubjects();
-
-                // Show success message
                 CreationMessage = $"Successfully created: {NewSubjectName}";
-                // Reset input fields
                 NewSubjectName = "";
                 NewSubjectDescription = "";
-
-                // Reset editing state
                 IsEditingMode = false;
-
                 await ClearCreationMessageAfterDelay();
             }
         }
 
-        /// <summary>
-        /// Command to delete the selected subject.
-        /// </summary>
         [RelayCommand]
         private async Task DeleteSubject()
         {
             if (SelectedExistingSubject != null)
             {
-                var deletedSubject = SelectedExistingSubject;
-                // Get selected subject ID
                 string subjectIdToDelete = SelectedExistingSubject.SubjectID;
-
-                // 🔹 Delete from JSON
                 subjectService.DeleteSubject(subjectIdToDelete);
-
-                // Reload subjects from JSON to ensure sync
                 LoadSubjects();
-
-                // Reset selection
                 SelectedExistingSubject = null;
-
-                // Set the deletion message to be displayed in the UI
-                CreationMessage = $"Successfully deleted the subject: {deletedSubject.Name}";
-
-                // Reset editing state
+                CreationMessage = $"Successfully deleted: {subjectIdToDelete}";
                 IsEditingMode = false;
-
                 await ClearCreationMessageAfterDelay();
-            }
-            else
-            {
-                CreationMessage = string.Empty; // If no subject was selected, clear the message
             }
         }
 
-        /// <summary>
-        /// Clears the creation message after 3 seconds.
-        /// </summary>
         private async Task ClearCreationMessageAfterDelay()
         {
-            await Task.Delay(3000); // Delay of 3 seconds
-            CreationMessage = string.Empty; // Clear the message
+            await Task.Delay(3000);
+            CreationMessage = string.Empty;
         }
     }
 }

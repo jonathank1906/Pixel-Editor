@@ -11,19 +11,13 @@ using System;
 namespace HW2_University_Management_App.ViewModels
 {
     public partial class StudentDashboardViewModel : ViewModelBase
+    
     {
         private readonly SubjectService subjectService = new();
         private readonly User student;
-        private readonly Random random = new();
 
         public ObservableCollection<ColoredSubject> EnrolledSubjects { get; set; }
         public ObservableCollection<ColoredSubject> AvailableSubjects { get; set; }
-
-        private ObservableCollection<ColoredSubject> allEnrolledSubjects;
-        private ObservableCollection<ColoredSubject> allAvailableSubjects;
-
-        [ObservableProperty]
-        private string searchQuery = "";
 
         [ObservableProperty]
         private ColoredSubject selectedAvailableSubject;
@@ -31,13 +25,14 @@ namespace HW2_University_Management_App.ViewModels
         [ObservableProperty]
         private ColoredSubject selectedEnrolledSubject;
 
+        [ObservableProperty]
+        private string searchQuery = "";
+
         public StudentDashboardViewModel(User student)
         {
             this.student = student;
             EnrolledSubjects = new ObservableCollection<ColoredSubject>();
             AvailableSubjects = new ObservableCollection<ColoredSubject>();
-            allEnrolledSubjects = new ObservableCollection<ColoredSubject>();
-            allAvailableSubjects = new ObservableCollection<ColoredSubject>();
 
             LoadSubjects();
         }
@@ -48,12 +43,12 @@ namespace HW2_University_Management_App.ViewModels
         private void LoadSubjects()
         {
             var subjects = subjectService.GetSubjects();
+            EnrolledSubjects.Clear();
+            AvailableSubjects.Clear();
 
             foreach (var subject in subjects)
             {
                 var color = ColorStyles.GetRandomColor();
-
-                // 🔹 Ensure ColoredSubject includes the subject description
                 var coloredSubject = new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color);
 
                 if (student.EnrolledSubjects.Contains(subject.SubjectID))
@@ -61,25 +56,39 @@ namespace HW2_University_Management_App.ViewModels
                 else
                     AvailableSubjects.Add(coloredSubject);
             }
-            UpdateFilteredSubjects();
         }
 
         /// <summary>
-        /// Command to enroll the student in a selected subject.
+        /// Filters subjects based on the search query.
         /// </summary>
-        // 
         [RelayCommand]
-        private void UpdateFilteredSubjects()
+        private void SearchSubjects()
         {
-            EnrolledSubjects.Clear();
+            var subjects = subjectService.GetSubjects();
+
+            var filteredAvailable = subjects
+                .Where(s => s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
+                            !student.EnrolledSubjects.Contains(s.SubjectID))
+                .Select(s => new ColoredSubject(s.SubjectID, s.Name, s.Description, ColorStyles.GetRandomColor()));
+
+            var filteredEnrolled = subjects
+                .Where(s => s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
+                            student.EnrolledSubjects.Contains(s.SubjectID))
+                .Select(s => new ColoredSubject(s.SubjectID, s.Name, s.Description, ColorStyles.GetRandomColor()));
+
             AvailableSubjects.Clear();
+            foreach (var sub in filteredAvailable)
+            {
+                AvailableSubjects.Add(sub);
+            }
 
-            foreach (var subject in allEnrolledSubjects.Where(s => s.Name.Contains(SearchQuery, System.StringComparison.OrdinalIgnoreCase)))
-                EnrolledSubjects.Add(subject);
+            EnrolledSubjects.Clear();
+            foreach (var sub in filteredEnrolled)
+            {
+                EnrolledSubjects.Add(sub);
+            }
+        }
 
-            foreach (var subject in allAvailableSubjects.Where(s => s.Name.Contains(SearchQuery, System.StringComparison.OrdinalIgnoreCase)))
-                AvailableSubjects.Add(subject);
-        }       
         [RelayCommand]
         private void EnrollInSubject()
         {
@@ -90,14 +99,10 @@ namespace HW2_University_Management_App.ViewModels
 
                 EnrolledSubjects.Add(SelectedAvailableSubject);
                 AvailableSubjects.Remove(SelectedAvailableSubject);
-
-                subjectService.SaveData();  // Save the data after enrollment
+                subjectService.SaveData();
             }
         }
 
-        /// <summary>
-        /// Command to drop an enrolled subject.
-        /// </summary>
         [RelayCommand]
         private void DropSubject()
         {
@@ -108,11 +113,10 @@ namespace HW2_University_Management_App.ViewModels
 
                 AvailableSubjects.Add(SelectedEnrolledSubject);
                 EnrolledSubjects.Remove(SelectedEnrolledSubject);
-
-                subjectService.SaveData();  // Save data after dropping the subject
+                subjectService.SaveData();
             }
         }
-
+    
         /// <summary>
         /// Handles clicking on a subject (for future features).
         /// </summary>
@@ -132,3 +136,4 @@ namespace HW2_University_Management_App.ViewModels
         }
     }
 }
+

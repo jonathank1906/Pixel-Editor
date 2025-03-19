@@ -11,7 +11,10 @@
       "UserID": "jonathan",
       "UserPassword": "j123",
       "UserRole": "Student",
-      "EnrolledSubjects": [],
+      "EnrolledSubjects": [
+        "85b0a909-562e-4020-860b-69ab74b659b0",
+        "6f43f0ed-b7d9-4885-b314-78ebed2fa1e6"
+      ],
       "CreatedSubjects": []
     },
     {
@@ -20,17 +23,29 @@
       "UserRole": "Teacher",
       "EnrolledSubjects": [],
       "CreatedSubjects": [
-        "13810ef6-39be-47a8-9ed9-5d740ee16a9a"
+        "85b0a909-562e-4020-860b-69ab74b659b0",
+        "6f43f0ed-b7d9-4885-b314-78ebed2fa1e6"
       ]
     }
   ],
   "Subjects": [
     {
-      "SubjectID": "13810ef6-39be-47a8-9ed9-5d740ee16a9a",
-      "Name": "Math 1",
-      "Description": "edited",
+      "SubjectID": "85b0a909-562e-4020-860b-69ab74b659b0",
+      "Name": "love",
+      "Description": "lol drama mus watch",
       "TeacherID": "sarah",
-      "EnrolledStudents": []
+      "EnrolledStudents": [
+        "jonathan"
+      ]
+    },
+    {
+      "SubjectID": "6f43f0ed-b7d9-4885-b314-78ebed2fa1e6",
+      "Name": "go on",
+      "Description": "yoho is good",
+      "TeacherID": "sarah",
+      "EnrolledStudents": [
+        "jonathan"
+      ]
     }
   ]
 }
