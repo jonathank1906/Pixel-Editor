@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:svg="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
     xmlns:vm="using:HW2_University_Management_App.ViewModels"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -12,10 +13,26 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="20">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                <TextBox Width="200" Height="30" Watermark="Search for subjects..."
-                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Width="50" Height="30" Content="🔍" Command="{Binding SearchSubjectsCommand}" />
+            <StackPanel
+                Margin="10"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal"
+                Spacing="10">
+                <TextBox
+                    Width="200"
+                    Height="30"
+                    Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                    Watermark="Search for subjects..." />
+                <Button
+                    Width="40"
+                    Height="40"
+                    Command="{Binding SearchSubjectsCommand}"
+                    Background="Transparent">
+                    <Image
+                        Width="40"
+                        Height="40"
+                        Source="{SvgImage Assets/Search-Icon.svg}" />
+                </Button>
             </StackPanel>
 
             <TextBlock
@@ -75,7 +92,7 @@
                                         </Border>
                                     </ToolTip.Tip>
 
-                                    <Grid Width="180" Height="120"> 
+                                    <Grid Width="180" Height="120">
                                         <!--  Increased height for better spacing  -->
                                         <TextBlock
                                             HorizontalAlignment="Center"

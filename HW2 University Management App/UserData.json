@@ -62,7 +62,7 @@
     },
     {
       "SubjectID": "47241896-68fc-4c97-8ddf-147ae8f09719",
-      "Name": "Mobile App Dev",
+      "Name": "Mobile App Dev324234",
       "Description": "React native - Redux - JS",
       "TeacherID": "sarah",
       "EnrolledStudents": []
@@ -111,7 +111,7 @@
     },
     {
       "SubjectID": "0ac3d116-3638-4150-ba1f-bfbef6866f3f",
-      "Name": "Backend Dev",
+      "Name": "Frontend Dev",
       "Description": "MySQL - MongoDB - Express.JS - Django - php",
       "TeacherID": "sarah",
       "EnrolledStudents": []
@@ -125,7 +125,7 @@
     },
     {
       "SubjectID": "eb2819f6-919e-4a31-a6e8-1b780d103d00",
-      "Name": "Architectural Eng",
+      "Name": "math",
       "Description": "Architecture Design - Advance Math - Azure",
       "TeacherID": "sarah",
       "EnrolledStudents": []

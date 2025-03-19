@@ -3,6 +3,7 @@
 		xmlns:vm="clr-namespace:HW2_University_Management_App.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:svg="clr-namespace:Avalonia.Svg.Skia;assembly=Avalonia.Svg.Skia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		Width="800"
 		Height="450"
@@ -27,8 +28,8 @@
 		<!-- Top Bar for navigation -->
 		<Grid Grid.Row="0" Grid.ColumnSpan="2" Background="#EE7203" Height="50">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="130"/>
-				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="128"/>
+				<ColumnDefinition Width="50"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="30"/>
@@ -36,6 +37,15 @@
 			</Grid.ColumnDefinitions>
 
 			 <!-- Logo -->
+			    <Image
+                Name="Logo"
+                Grid.Row="0"
+				Grid.Column="1"
+                Width="42"
+                Source="{SvgImage ../Assets/ItsStudying-Logo.svg}"
+                Stretch="Uniform"
+			
+                ZIndex="4" />
 
 			 <!-- App Name -->
             <TextBlock Text="ItsStudying"
@@ -43,8 +53,8 @@
                        FontWeight="Bold"
                        Foreground="White"
                        VerticalAlignment="Center"
-                       Margin="5,0,0,0"
-                       Grid.Column="1"/>
+					   Margin="20,0,0,0"
+                       Grid.Column="0"/>
 
 			
 	
@@ -52,8 +62,9 @@
 			<Button Background="Transparent" 
 					Content="Log out" FontSize="22" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center"
 					Grid.Column="4" 
+					FontWeight="Bold"
 					Width="120"
-					Height="44"
+					Height="40"
 					Margin="0,0,0,0" 
 					Command="{Binding logoutCommand}">
 			</Button>
