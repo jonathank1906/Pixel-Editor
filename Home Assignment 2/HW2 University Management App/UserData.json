@@ -4,18 +4,14 @@
       "UserID": "jake",
       "UserPassword": "student123",
       "UserRole": "Student",
-      "EnrolledSubjects": [
-        "13810ef6-39be-47a8-9ed9-5d740ee16a9a"
-      ],
+      "EnrolledSubjects": [],
       "CreatedSubjects": []
     },
     {
       "UserID": "jonathan",
       "UserPassword": "j123",
       "UserRole": "Student",
-      "EnrolledSubjects": [
-        "13810ef6-39be-47a8-9ed9-5d740ee16a9a"
-      ],
+      "EnrolledSubjects": [],
       "CreatedSubjects": []
     },
     {
@@ -24,20 +20,129 @@
       "UserRole": "Teacher",
       "EnrolledSubjects": [],
       "CreatedSubjects": [
-        "13810ef6-39be-47a8-9ed9-5d740ee16a9a"
+        "f8fd8ad4-e0eb-4e60-bece-1719538bb097",
+        "b42a5cfa-73db-4277-a2c3-f8d762585d71",
+        "a7d5260d-66a6-4d3c-9591-c66a443dd16e",
+        "47241896-68fc-4c97-8ddf-147ae8f09719",
+        "ba43fbb4-591b-4ad6-808a-cc936d2f28e2",
+        "ce08465b-12c1-4770-83af-38237b077702",
+        "af8d226f-e637-4be8-8e2f-c63d58136331",
+        "d8918e98-54dc-41a1-90d2-49c77bc4a689",
+        "a7fb4baf-1a26-4ec6-83ec-cb155dbcca9d",
+        "19020dd0-b966-4e53-9a46-f4a5b8fac913",
+        "0ac3d116-3638-4150-ba1f-bfbef6866f3f",
+        "eb59650f-3321-4b4a-8a3f-3011a5b6b609",
+        "eb2819f6-919e-4a31-a6e8-1b780d103d00",
+        "1376b045-87c3-49f7-a4ff-c5f55bce51e9",
+        "f8eaff1f-a71c-44a7-9123-5cbfe9b81360"
       ]
     }
   ],
   "Subjects": [
     {
-      "SubjectID": "13810ef6-39be-47a8-9ed9-5d740ee16a9a",
-      "Name": "Math 1",
-      "Description": "changed",
+      "SubjectID": "f8fd8ad4-e0eb-4e60-bece-1719538bb097",
+      "Name": "Mathematics",
+      "Description": "Al Gebra - Probability - Master Calculus",
       "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jake",
-        "jonathan"
-      ]
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "b42a5cfa-73db-4277-a2c3-f8d762585d71",
+      "Name": "Software Eng",
+      "Description": "OOP Concepts - Agile ",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "a7d5260d-66a6-4d3c-9591-c66a443dd16e",
+      "Name": "Web Development",
+      "Description": "Node.js - Html - Css - Javascript",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "47241896-68fc-4c97-8ddf-147ae8f09719",
+      "Name": "Mobile App Dev",
+      "Description": "React native - Redux - JS",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "ba43fbb4-591b-4ad6-808a-cc936d2f28e2",
+      "Name": "Entrepreneurship",
+      "Description": "Business Management - Communication",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "ce08465b-12c1-4770-83af-38237b077702",
+      "Name": "Game Development",
+      "Description": "Unity C# - Unreal Engine C\u002B\u002B",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "af8d226f-e637-4be8-8e2f-c63d58136331",
+      "Name": "Cybersecurity",
+      "Description": "Ethical Hacking - Malware development - Python - C\u002B\u002B",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "d8918e98-54dc-41a1-90d2-49c77bc4a689",
+      "Name": "Artificial Intelligent",
+      "Description": "Machine Learning - Python",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "a7fb4baf-1a26-4ec6-83ec-cb155dbcca9d",
+      "Name": "Robotics",
+      "Description": "Embedded System - Physics - C ",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "19020dd0-b966-4e53-9a46-f4a5b8fac913",
+      "Name": "IT Communication",
+      "Description": "Communication - Computer System - Tech foundation",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "0ac3d116-3638-4150-ba1f-bfbef6866f3f",
+      "Name": "Backend Dev",
+      "Description": "MySQL - MongoDB - Express.JS - Django - php",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "eb59650f-3321-4b4a-8a3f-3011a5b6b609",
+      "Name": "Computer System",
+      "Description": "PC components - Models - Process",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "eb2819f6-919e-4a31-a6e8-1b780d103d00",
+      "Name": "Architectural Eng",
+      "Description": "Architecture Design - Advance Math - Azure",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "1376b045-87c3-49f7-a4ff-c5f55bce51e9",
+      "Name": "DevOps ",
+      "Description": "Communication - Java - JS - C# - Teams",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
+    },
+    {
+      "SubjectID": "f8eaff1f-a71c-44a7-9123-5cbfe9b81360",
+      "Name": "Digital Designing",
+      "Description": "2D/3D Modelling - Animation - Blender - Adobe Illustrator - Figma",
+      "TeacherID": "sarah",
+      "EnrolledStudents": []
     }
   ]
 }

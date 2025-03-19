@@ -8,94 +8,131 @@ using HW2_University_Management_App.Styles;
 using System.Collections.ObjectModel;
 using System;
 
-namespace HW2_University_Management_App.ViewModels;
-
-public partial class StudentDashboardViewModel : ViewModelBase
+namespace HW2_University_Management_App.ViewModels
 {
-    private readonly SubjectService subjectService = new();
-    private readonly User student;
-    private readonly Random random = new();
-
-    public ObservableCollection<ColoredSubject> EnrolledSubjects { get; set; }
-    public ObservableCollection<ColoredSubject> AvailableSubjects { get; set; }
-
-    [ObservableProperty]
-    private ColoredSubject selectedAvailableSubject;
-
-    [ObservableProperty]
-    private ColoredSubject selectedEnrolledSubject;
-
-    public StudentDashboardViewModel(User student)
+    public partial class StudentDashboardViewModel : ViewModelBase
+    
     {
-        this.student = student;
-        EnrolledSubjects = new ObservableCollection<ColoredSubject>();
-        AvailableSubjects = new ObservableCollection<ColoredSubject>();
+        private readonly SubjectService subjectService = new();
+        private readonly User student;
 
-        LoadSubjects();
-    }
+        public ObservableCollection<ColoredSubject> EnrolledSubjects { get; set; }
+        public ObservableCollection<ColoredSubject> AvailableSubjects { get; set; }
 
-    // Loads subjects from the JSON file and assigns them to Available or Enrolled lists.
-    private void LoadSubjects()
-    {
-        var subjects = subjectService.GetSubjects();
+        [ObservableProperty]
+        private ColoredSubject selectedAvailableSubject;
 
-        foreach (var subject in subjects)
+        [ObservableProperty]
+        private ColoredSubject selectedEnrolledSubject;
+
+        [ObservableProperty]
+        private string searchQuery = "";
+
+        public StudentDashboardViewModel(User student)
         {
-            var color = ColorStyles.GetRandomColor();
+            this.student = student;
+            EnrolledSubjects = new ObservableCollection<ColoredSubject>();
+            AvailableSubjects = new ObservableCollection<ColoredSubject>();
 
-            // 🔹 Ensure ColoredSubject includes the subject description
-            var coloredSubject = new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color);
-
-            if (student.EnrolledSubjects.Contains(subject.SubjectID))
-                EnrolledSubjects.Add(coloredSubject);
-            else
-                AvailableSubjects.Add(coloredSubject);
+            LoadSubjects();
         }
-    }
 
-    // Command to enroll the student in a selected subject.
-    [RelayCommand]
-    private void EnrollInSubject()
-    {
-        if (SelectedAvailableSubject != null)
+        
+        /// Loads subjects from the JSON file and assigns them to Available or Enrolled lists.
+        
+        private void LoadSubjects()
         {
-            student.EnrolledSubjects.Add(SelectedAvailableSubject.SubjectID);
-            subjectService.EnrollStudent(student.UserID, SelectedAvailableSubject.SubjectID);
+            var subjects = subjectService.GetSubjects();
+            EnrolledSubjects.Clear();
+            AvailableSubjects.Clear();
 
-            EnrolledSubjects.Add(SelectedAvailableSubject);
-            AvailableSubjects.Remove(SelectedAvailableSubject);
+            foreach (var subject in subjects)
+            {
+                var color = ColorStyles.GetRandomColor();
+                var coloredSubject = new ColoredSubject(subject.SubjectID, subject.Name, subject.Description, color);
 
-            subjectService.SaveData();  // Save the data after enrollment
+                if (student.EnrolledSubjects.Contains(subject.SubjectID))
+                    EnrolledSubjects.Add(coloredSubject);
+                else
+                    AvailableSubjects.Add(coloredSubject);
+            }
         }
-    }
 
-    // Command to drop an enrolled subject.
-    [RelayCommand]
-    private void DropSubject()
-    {
-        if (SelectedEnrolledSubject != null)
+        
+        /// Filters subjects based on the search query.
+       
+        [RelayCommand]
+        private void SearchSubjects()
         {
-            student.EnrolledSubjects.Remove(SelectedEnrolledSubject.SubjectID);
-            subjectService.DropStudent(student.UserID, SelectedEnrolledSubject.SubjectID);
+            var subjects = subjectService.GetSubjects();
 
-            AvailableSubjects.Add(SelectedEnrolledSubject);
-            EnrolledSubjects.Remove(SelectedEnrolledSubject);
+            var filteredAvailable = subjects
+                .Where(s => s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
+                            !student.EnrolledSubjects.Contains(s.SubjectID))
+                .Select(s => new ColoredSubject(s.SubjectID, s.Name, s.Description, ColorStyles.GetRandomColor()));
 
-            subjectService.SaveData();  // Save data after dropping the subject
+            var filteredEnrolled = subjects
+                .Where(s => s.Name.Contains(SearchQuery, StringComparison.OrdinalIgnoreCase) &&
+                            student.EnrolledSubjects.Contains(s.SubjectID))
+                .Select(s => new ColoredSubject(s.SubjectID, s.Name, s.Description, ColorStyles.GetRandomColor()));
+
+            AvailableSubjects.Clear();
+            foreach (var sub in filteredAvailable)
+            {
+                AvailableSubjects.Add(sub);
+            }
+
+            EnrolledSubjects.Clear();
+            foreach (var sub in filteredEnrolled)
+            {
+                EnrolledSubjects.Add(sub);
+            }
         }
-    }
 
-    // Handles clicking on a subject (for future features).
-    [RelayCommand]
-    public void OnSubjectClicked(ColoredSubject subject)
-    {
-        // Future implementation (e.g., show subject details)
-    }
+        [RelayCommand]
+        private void EnrollInSubject()
+        {
+            if (SelectedAvailableSubject != null)
+            {
+                student.EnrolledSubjects.Add(SelectedAvailableSubject.SubjectID);
+                subjectService.EnrollStudent(student.UserID, SelectedAvailableSubject.SubjectID);
 
-    // Deselects any selected subject.
-    public void DeselectSubject()
-    {
-        SelectedEnrolledSubject = null;
-        SelectedAvailableSubject = null;
+                EnrolledSubjects.Add(SelectedAvailableSubject);
+                AvailableSubjects.Remove(SelectedAvailableSubject);
+                subjectService.SaveData();
+            }
+        }
+
+        [RelayCommand]
+        private void DropSubject()
+        {
+            if (SelectedEnrolledSubject != null)
+            {
+                student.EnrolledSubjects.Remove(SelectedEnrolledSubject.SubjectID);
+                subjectService.DropStudent(student.UserID, SelectedEnrolledSubject.SubjectID);
+
+                AvailableSubjects.Add(SelectedEnrolledSubject);
+                EnrolledSubjects.Remove(SelectedEnrolledSubject);
+                subjectService.SaveData();
+            }
+        }
+    
+        
+        /// Handles clicking on a subject (for future features).
+        
+        [RelayCommand]
+        public void OnSubjectClicked(ColoredSubject subject)
+        {
+            // Future implementation (e.g., show subject details)
+        }
+
+        
+        /// Deselects any selected subject.
+        
+        public void DeselectSubject()
+        {
+            SelectedEnrolledSubject = null;
+            SelectedAvailableSubject = null;
+        }
     }
 }
