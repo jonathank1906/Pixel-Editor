@@ -8,7 +8,7 @@ namespace HW2_University_Management_App.Tests;
 public class SubjectServiceTests
 {
     [Fact]
-    public void TestDataPersistence()
+    public void SubjectService_Should_Persist_Changes_Across_Sessions()
     {
         // Arrange
         const string originalFile = "UserData.json";
@@ -70,7 +70,7 @@ public class SubjectServiceTests
     }
 
     [Fact]
-    public void CreateSubjectTest()
+    public void SubjectService_Can_Create_New_Subject()
     {
         // Arrange
         const string originalFile = "UserData.json";
@@ -128,7 +128,7 @@ public class SubjectServiceTests
     }
 
     [Fact]
-    public void LoginTest()
+    public void SubjectService_Can_Authenticate_Valid_Users_And_Reject_Invalid_Ones()
     {
         // Arrange
         const string originalFile = "UserData.json";

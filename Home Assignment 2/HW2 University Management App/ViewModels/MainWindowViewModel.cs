@@ -7,44 +7,41 @@ using HW2_University_Management_App.Views;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 
-
-namespace HW2_University_Management_App.ViewModels
+namespace HW2_University_Management_App.ViewModels;
+public partial class MainWindowViewModel : ViewModelBase
 {
-    public partial class MainWindowViewModel : ViewModelBase
+    public Window window;
+
+    public User userName;
+    private readonly SubjectService subjectService;
+
+    [ObservableProperty]
+    private object? currentContent;
+
+    [RelayCommand]
+    private void logout()
     {
-        public Window window;
 
-        public User userName;
-        private readonly SubjectService subjectService; 
+        var loginWindow = new LoginWindow();
+        loginWindow.DataContext = new LoginWindowViewModel(loginWindow); // Passes the window so it can be manipulated
 
-        [ObservableProperty]
-        private object? currentContent;
+        loginWindow.Show();
+        window.Close();
+    }
 
-        [RelayCommand]
-        private void logout()
+    public MainWindowViewModel(User item, Window window)
+    {
+        this.window = window;
+        userName = item;
+        subjectService = new SubjectService();
+
+        if (userName.UserRole == "Student")
         {
-
-            var loginWindow = new LoginWindow();
-            loginWindow.DataContext = new LoginWindowViewModel(loginWindow); // Passes the window so it can be manipulated
-
-            loginWindow.Show();
-            window.Close();
+            CurrentContent = new StudentDashboardView() { DataContext = new StudentDashboardViewModel(userName) };
         }
-
-        public MainWindowViewModel(User item, Window window)
+        else if (userName.UserRole == "Teacher")
         {
-            this.window = window;
-            userName = item;
-            subjectService = new SubjectService();
-
-            if (userName.UserRole == "Student")
-            {
-                CurrentContent = new StudentDashboardView() { DataContext = new StudentDashboardViewModel(userName) };
-            }
-            else if (userName.UserRole == "Teacher")
-            {
-                CurrentContent = new TeacherDashboardView() { DataContext = new TeacherDashboardViewModel(userName) };
-            }
+            CurrentContent = new TeacherDashboardView() { DataContext = new TeacherDashboardViewModel(userName) };
         }
     }
 }
