@@ -6,11 +6,14 @@ using SkiaSharp;
 using System.Collections.Generic;
 using HW3_Data_Visualization.Models;
 using System.Linq;
+using System.Windows.Input;
 
 namespace HW3_Data_Visualization.ViewModels
 {
     public partial class ChartViewModel : ViewModelBase
     {
+        public ICommand? RemoveChartCommand { get; set; }
+
         [ObservableProperty]
         private string title = "Food Waste Chart";
 
