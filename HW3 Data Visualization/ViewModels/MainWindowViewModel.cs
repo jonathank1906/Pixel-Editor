@@ -13,7 +13,7 @@ namespace HW3_Data_Visualization.ViewModels
     {
         private readonly CsvService _csvService;
 
-        public ObservableCollection<ChartViewModel> Charts { get; } = new();
+        public ObservableCollection<BarChartViewModel> Charts { get; } = new();
         public ObservableCollection<FoodWasteData> FoodWasteRecords { get; set; } = new();
 
         public MainWindowViewModel()
@@ -33,7 +33,7 @@ namespace HW3_Data_Visualization.ViewModels
         private void ShowHouseholdWaste()
         {
             var householdData = FoodWasteRecords.Where(f => f.FoodCategory == "Household").ToList();
-            Charts.Add(new ChartViewModel(householdData)
+            Charts.Add(new BarChartViewModel(householdData)
             {
                 RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
             });
@@ -50,7 +50,7 @@ namespace HW3_Data_Visualization.ViewModels
                     TotalWaste = g.Sum(f => f.TotalWaste)
                 })
                 .ToList();
-            Charts.Add(new ChartViewModel(groupedByCountry)
+            Charts.Add(new BarChartViewModel(groupedByCountry)
             {
                 RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
             });
@@ -67,7 +67,7 @@ namespace HW3_Data_Visualization.ViewModels
                     TotalWaste = g.Sum(f => f.TotalWaste)
                 })
                 .ToList();
-            Charts.Add(new ChartViewModel(yearlyData)
+            Charts.Add(new BarChartViewModel(yearlyData)
             {
                 RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
             });
@@ -76,13 +76,13 @@ namespace HW3_Data_Visualization.ViewModels
         [RelayCommand]
         private void ShowFoodWaste()
         {
-            Charts.Add(new ChartViewModel(FoodWasteRecords.ToList())
+            Charts.Add(new BarChartViewModel(FoodWasteRecords.ToList())
             {
                 RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
             });
         }
         [RelayCommand]
-        private void RemoveChart(ChartViewModel chart)
+        private void RemoveChart(BarChartViewModel chart)
         {
             Charts.Remove(chart);
         }

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace HW3_Data_Visualization.ViewModels
 {
-    public partial class ChartViewModel : ViewModelBase
+    public partial class BarChartViewModel : ViewModelBase
     {
         public ICommand? RemoveChartCommand { get; set; }
 
@@ -27,7 +27,7 @@ namespace HW3_Data_Visualization.ViewModels
         private Axis[] yAxes;
 
         // Constructor to initialize the data from FoodWasteData
-        public ChartViewModel(List<FoodWasteData> foodWasteRecords)
+        public BarChartViewModel(List<FoodWasteData> foodWasteRecords)
         {
             // Create column series for each food category dynamically
             var groupedData = foodWasteRecords
