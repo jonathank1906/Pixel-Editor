@@ -10,27 +10,82 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="Global Food Waste Dashboard">
 
-    <Grid ColumnDefinitions="250, *" RowDefinitions="Auto,*">
+    <Grid ColumnDefinitions="250, *" RowDefinitions="*">
 
-        <!-- Control Panel -->
-        <Border Padding="10" Background="#f4f4f4">
-        <StackPanel Grid.Column="0">
-            <TextBlock Text="Preset Queries" FontWeight="Bold" FontSize="18" Margin="0 0 0 10"/>
-            <Button Content="Waste by Category" Margin="0 5"/>
-            <Button Content="Waste by Region" Margin="0 5"/>
-            <Button Content="Yearly Waste Trend" Margin="0 5"/>
-            <Button Content="Top 5 Countries" Margin="0 5"/>
+        <Border Grid.Column="0"
+        Background="#6A0DAD"
+        Padding="20"
+        BorderThickness="0 0 1 0">
+
+    <DockPanel LastChildFill="True">
+
+                <!-- Top part: Buttons -->
+        <StackPanel DockPanel.Dock="Top" VerticalAlignment="Top">
+            <TextBlock Text="Preset Queries"
+                    FontWeight="Bold"
+                    FontSize="20"
+                    Foreground="White"
+                    Margin="0 0 0 20"/>
+
+            <StackPanel Width="200"> 
+                <Button Content="Household Waste"
+                        Margin="0 10"
+                        Background="White"
+                        Foreground="#6A0DAD"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Stretch"/>
+
+                <Button Content="Waste by Country"
+                        Margin="0 10"
+                        Background="White"
+                        Foreground="#6A0DAD"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Stretch"/>
+
+                <Button Content="Yearly Waste Trend"
+                        Margin="0 10"
+                        Background="White"
+                        Foreground="#6A0DAD"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Stretch"/>
+
+                <Button Content="Food Waste"
+                        Margin="0 10"
+                        Background="White"
+                        Foreground="#6A0DAD"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Stretch"/>
+            </StackPanel>
         </StackPanel>
-        </Border>
 
-        <!-- Chart Dashboard -->
-        <ScrollViewer Grid.Column="1" Padding="10">
+        <!-- Bottom: Footer -->
+        <TextBlock Text="Powered by Genius Engineers"
+                   DockPanel.Dock="Bottom"
+                   Foreground="White"
+                   FontSize="12"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   Margin="0 30 0 0"
+                   Opacity="0.7"/>
+    </DockPanel>
+</Border>
+
+
+        <!-- Dashboard -->
+        <ScrollViewer Grid.Column="1" Padding="20" Background="#F1E6FF">
             <ItemsControl ItemsSource="{Binding Charts}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <views:ChartView DataContext="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+
+                <!-- charts -->
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="20"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
 
