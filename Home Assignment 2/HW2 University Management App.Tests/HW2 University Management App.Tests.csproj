@@ -16,6 +16,9 @@
      <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <ProjectReference Include="..\HW2 University Management App\HW2 University Management App.csproj" />
+  <None Update="UserData.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
   </ItemGroup>
 
   <PropertyGroup>

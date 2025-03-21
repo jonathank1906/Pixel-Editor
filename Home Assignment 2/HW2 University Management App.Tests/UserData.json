@@ -4,9 +4,7 @@
       "UserID": "jake",
       "UserPassword": "student123",
       "UserRole": "Student",
-      "EnrolledSubjects": [
-        "f8fd8ad4-e0eb-4e60-bece-1719538bb097"
-      ],
+      "EnrolledSubjects": [],
       "CreatedSubjects": []
     },
     {
@@ -46,9 +44,7 @@
       "Name": "Mathematics",
       "Description": "Al Gebra - Probability - Master Calculus",
       "TeacherID": "sarah",
-      "EnrolledStudents": [
-        "jake"
-      ]
+      "EnrolledStudents": []
     },
     {
       "SubjectID": "b42a5cfa-73db-4277-a2c3-f8d762585d71",

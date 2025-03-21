@@ -8,69 +8,67 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace HW2_University_Management_App.ViewModels
+namespace HW2_University_Management_App.ViewModels;
+public partial class LoginWindowViewModel : ViewModelBase
 {
-    public partial class LoginWindowViewModel : ViewModelBase
+    private readonly Window closeable;
+    private readonly SubjectService subjectService;
+
+    private string errorMessage = string.Empty;
+
+    [ObservableProperty]
+    private string password = "";
+
+    [ObservableProperty]
+    private string username = "";
+
+    [ObservableProperty]
+    private bool signInSucceed = false;
+
+    // Constructor initializes SubjectService (JSON-based data)
+    public LoginWindowViewModel(Window closeable)
     {
-        private readonly Window closeable;
-        private readonly SubjectService subjectService;
+        this.closeable = closeable;
+        subjectService = new SubjectService(); // Load users from JSON
+    }
 
-        private string errorMessage = string.Empty;
-        
-        [ObservableProperty]
-        private string password = "";
+    public string ErrorMessage
+    {
+        get => errorMessage;
+        set => this.SetProperty(ref errorMessage, value);
+    }
 
-        [ObservableProperty]
-        private string username = "";
+    [RelayCommand]
+    public async Task AttemptLogin()
+    {
+        User user = subjectService.AuthenticateUser(Username, Password);
 
-        [ObservableProperty]
-        private bool signInSucceed = false;
-
-        // Constructor initializes SubjectService (JSON-based data)
-        public LoginWindowViewModel(Window closeable)
+        if (user != null)
         {
-            this.closeable = closeable;
-            subjectService = new SubjectService(); // Load users from JSON
+            SignInSucceed = true;
+            Debug.WriteLine("Login successful");
+            OpenMainWindow(user);
         }
-
-        public string ErrorMessage
+        else
         {
-            get => errorMessage;
-            set => this.SetProperty(ref errorMessage, value);
+            ErrorMessage = "Invalid username or password";
+            await ClearErrorMessageAfterDelay();
         }
+    }
 
-        [RelayCommand]
-        public async Task AttemptLogin()
-        {
-            User user = subjectService.AuthenticateUser(Username, Password);
+    private async Task ClearErrorMessageAfterDelay()
+    {
+        await Task.Delay(2500);
+        ErrorMessage = string.Empty;
+    }
 
-            if (user != null)
-            {
-                SignInSucceed = true;
-                Debug.WriteLine("Login successful");
-                OpenMainWindow(user);
-            }
-            else
-            {
-                ErrorMessage = "Invalid username or password";
-                await ClearErrorMessageAfterDelay();
-            }
-        }
+    private void OpenMainWindow(User user)
+    {
+        var mainWindow = new MainWindow();
+        var mainWindowViewModel = new MainWindowViewModel(user, mainWindow);
+        mainWindow.DataContext = mainWindowViewModel;
 
-        private async Task ClearErrorMessageAfterDelay()
-        {
-            await Task.Delay(2500);
-            ErrorMessage = string.Empty;
-        }
-
-        private void OpenMainWindow(User user)
-        {
-            var mainWindow = new MainWindow();
-            var mainWindowViewModel = new MainWindowViewModel(user, mainWindow);
-            mainWindow.DataContext = mainWindowViewModel;
-
-            mainWindow.Show();
-            closeable.Close(); // Close login window
-        }
+        mainWindow.Show();
+        closeable.Close(); // Close login window
     }
 }

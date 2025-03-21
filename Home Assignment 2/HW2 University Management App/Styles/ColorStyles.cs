@@ -2,11 +2,10 @@ using Avalonia.Media;
 using System;
 using System.Collections.Generic;
 
-namespace HW2_University_Management_App.Styles
+namespace HW2_University_Management_App.Styles;
+public static class ColorStyles
 {
-    public static class ColorStyles
-    {
-        private static readonly List<Color> subjectColors = new()
+    private static readonly List<Color> subjectColors = new()
         {
             Color.Parse("#FFD5BC"),
             Color.Parse("#D7CCC8"),
@@ -19,12 +18,11 @@ namespace HW2_University_Management_App.Styles
             Color.Parse("#D9E3E8"),
         };
 
-        private static readonly Random random = new();
+    private static readonly Random random = new();
 
-        public static SolidColorBrush GetRandomColor()
-        {
-            int index = random.Next(subjectColors.Count);
-            return new SolidColorBrush(subjectColors[index]);
-        }
+    public static SolidColorBrush GetRandomColor()
+    {
+        int index = random.Next(subjectColors.Count);
+        return new SolidColorBrush(subjectColors[index]);
     }
 }
