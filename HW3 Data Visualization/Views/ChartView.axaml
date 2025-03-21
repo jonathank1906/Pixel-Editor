@@ -3,16 +3,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:HW3_Data_Visualization.ViewModels"
+             xmlns:lvc="using:LiveChartsCore.SkiaSharpView.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HW3_Data_Visualization.Views.ChartView"
              x:DataType="vm:ChartViewModel">
 
-
- <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10">
-    <StackPanel>
-      <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
-      <!-- Placeholder - charts will be here -->
-      <TextBlock Text="(Chart will render here)" Foreground="Gray" HorizontalAlignment="Center" Margin="0 20"/>
-    </StackPanel>
-  </Border>
+    <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10">
+        <StackPanel>
+            <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16" Margin="0 0 0 10"/>
+            
+            <!-- Fixed Chart Rendering -->
+            <lvc:CartesianChart 
+                Series="{Binding SeriesCollection}" 
+                XAxes="{Binding XAxes}" 
+                YAxes="{Binding YAxes}"
+                Width="700"
+                Height="400"/>
+        </StackPanel>
+    </Border>
 </UserControl>
