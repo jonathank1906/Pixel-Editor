@@ -6,22 +6,26 @@ using System.Linq;
 using CsvHelper;
 using HW3_Data_Visualization.Models;
 
-namespace HW3_Data_Visualization.Services;
-
-public class CsvService
+namespace HW3_Data_Visualization.Services
 {
-    public List<FoodWasteData> LoadData(string filePath)
+    public class CsvService
     {
-        try
+        public List<FoodWasteData> LoadData(string filePath)
         {
-            using var reader = new StreamReader(filePath);
-            using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-            return csv.GetRecords<FoodWasteData>().ToList();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading CSV: {ex.Message}");
-            return new List<FoodWasteData>();
+            try
+            {
+                // Combine the current directory path with the relative file path
+                var fullPath = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                using var reader = new StreamReader(fullPath);
+                using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+                return csv.GetRecords<FoodWasteData>().ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading CSV: {ex.Message}");
+                return new List<FoodWasteData>();
+            }
         }
     }
 }

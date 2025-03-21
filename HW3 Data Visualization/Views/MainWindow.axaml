@@ -13,7 +13,7 @@
     <Grid ColumnDefinitions="250, *" RowDefinitions="*">
 
         <Border Grid.Column="0"
-        Background="#6A0DAD"
+        Background="#008F8C"
         Padding="20"
         BorderThickness="0 0 1 0">
 
@@ -31,28 +31,28 @@
                 <Button Content="Household Waste"
                         Margin="0 10"
                         Background="White"
-                        Foreground="#6A0DAD"
+                        Foreground="#015958"
                         FontWeight="SemiBold"
                         HorizontalAlignment="Stretch"/>
 
                 <Button Content="Waste by Country"
                         Margin="0 10"
                         Background="White"
-                        Foreground="#6A0DAD"
+                        Foreground="#015958"
                         FontWeight="SemiBold"
                         HorizontalAlignment="Stretch"/>
 
                 <Button Content="Yearly Waste Trend"
                         Margin="0 10"
                         Background="White"
-                        Foreground="#6A0DAD"
+                        Foreground="#015958"
                         FontWeight="SemiBold"
                         HorizontalAlignment="Stretch"/>
 
                 <Button Content="Food Waste"
                         Margin="0 10"
                         Background="White"
-                        Foreground="#6A0DAD"
+                        Foreground="#015958"
                         FontWeight="SemiBold"
                         HorizontalAlignment="Stretch"/>
             </StackPanel>
@@ -72,7 +72,7 @@
 
 
         <!-- Dashboard -->
-        <ScrollViewer Grid.Column="1" Padding="20" Background="#F1E6FF">
+        <ScrollViewer Grid.Column="1" Padding="20" Background="#2C3532">
             <ItemsControl ItemsSource="{Binding Charts}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
