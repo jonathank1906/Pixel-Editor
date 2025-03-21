@@ -3,18 +3,36 @@
         xmlns:vm="using:HW3_Data_Visualization.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:views="clr-namespace:HW3_Data_Visualization.Views"
+        mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600"
         x:Class="HW3_Data_Visualization.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="HW3_Data_Visualization">
+        Title="Global Food Waste Dashboard">
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+    <Grid ColumnDefinitions="250, *" RowDefinitions="Auto,*">
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <!-- Control Panel -->
+        <Border Padding="10" Background="#f4f4f4">
+        <StackPanel Grid.Column="0">
+            <TextBlock Text="Preset Queries" FontWeight="Bold" FontSize="18" Margin="0 0 0 10"/>
+            <Button Content="Waste by Category" Margin="0 5"/>
+            <Button Content="Waste by Region" Margin="0 5"/>
+            <Button Content="Yearly Waste Trend" Margin="0 5"/>
+            <Button Content="Top 5 Countries" Margin="0 5"/>
+        </StackPanel>
+        </Border>
 
+        <!-- Chart Dashboard -->
+        <ScrollViewer Grid.Column="1" Padding="10">
+            <ItemsControl ItemsSource="{Binding Charts}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:ChartView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+    </Grid>
 </Window>
