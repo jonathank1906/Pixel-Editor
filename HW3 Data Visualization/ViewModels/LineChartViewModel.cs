@@ -8,39 +8,44 @@ using System.Linq; // For LINQ methods like GroupBy and Select
 using HW3_Data_Visualization.Models; // Assuming FoodWasteData is in this namespace
 using System.Windows.Input; // For ICommand
 
+
 namespace HW3_Data_Visualization.ViewModels
 {
-    public partial class LineChartViewModel : ViewModelBase
+    public class LineChartViewModel : ChartViewModelBase
     {
-        public ICommand? RemoveChartCommand { get; set; }
+        public override string Title { get; } = "Line Chart";
 
-        [ObservableProperty] private string title = "Line Chart";
-        [ObservableProperty] private ISeries[] seriesCollection;
-        [ObservableProperty] private Axis[] xAxes;
-        [ObservableProperty] private Axis[] yAxes;
+        public override IEnumerable<ISeries> SeriesCollection { get; }
 
-        public LineChartViewModel(List<FoodWasteData> foodWasteRecords)
+        public override IEnumerable<Axis> XAxes { get; }
+
+        public override IEnumerable<Axis> YAxes { get; }
+
+        public LineChartViewModel(IEnumerable<FoodWasteData> data)
         {
-            var groupedData = foodWasteRecords
-                .GroupBy(f => f.Year)
-                .Select(g => new { Year = g.Key, TotalWaste = g.Sum(f => f.TotalWaste) })
+            var groupedData = data
+                .GroupBy(d => d.FoodCategory)
+                .Select(g => new { Category = g.Key, TotalWaste = g.Sum(d => d.TotalWaste) })
                 .ToList();
 
-            var seriesList = new[]
+            SeriesCollection = new[]
             {
-        new LineSeries<double>
-        {
-            Name = "Yearly Waste",
-            Values = groupedData.Select(g => g.TotalWaste).ToArray(),
-            Stroke = new SolidColorPaint(SKColors.Blue, 2),
-            Fill = null
-        }
-    };
+                new LineSeries<double>
+                {
+                    Values = groupedData.Select(g => g.TotalWaste).ToArray(),
+                    Name = "Waste Trend"
+                }
+            };
 
-            SeriesCollection = seriesList;
+            XAxes = new[]
+            {
+                new Axis { Labels = groupedData.Select(g => g.Category).ToArray() }
+            };
 
-            XAxes = new[] { new Axis { Labels = groupedData.Select(g => g.Year.ToString()).ToList() } };
-            YAxes = new[] { new Axis { Labeler = value => $"{value:N0} Tons", MinLimit = 0 } };
+            YAxes = new[]
+            {
+                new Axis { Labeler = value => $"{value:N0} Tons" }
+            };
         }
     }
 }

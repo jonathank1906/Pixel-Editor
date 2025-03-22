@@ -8,69 +8,41 @@ using HW3_Data_Visualization.Models;
 using System.Linq;
 using System.Windows.Input;
 
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using System.Collections.Generic;
+
 namespace HW3_Data_Visualization.ViewModels
 {
-    public partial class BarChartViewModel : ViewModelBase
+    public class BarChartViewModel : ChartViewModelBase
     {
-        public ICommand? RemoveChartCommand { get; set; }
+        public override string Title { get; } = "Bar Chart";
 
-        [ObservableProperty]
-        private string title = "Food Waste Chart";
+        public override IEnumerable<ISeries> SeriesCollection { get; }
 
-        [ObservableProperty]
-        private ISeries[] seriesCollection;
+        public override IEnumerable<Axis> XAxes { get; }
 
-        [ObservableProperty]
-        private Axis[] xAxes;
+        public override IEnumerable<Axis> YAxes { get; }
 
-        [ObservableProperty]
-        private Axis[] yAxes;
-
-        // Constructor to initialize the data from FoodWasteData
-        public BarChartViewModel(List<FoodWasteData> foodWasteRecords)
+        public BarChartViewModel(IEnumerable<FoodWasteData> data)
         {
-            // Create column series for each food category dynamically
-            var groupedData = foodWasteRecords
-                .GroupBy(f => f.FoodCategory)
-                .Select(g => new
-                {
-                    Category = g.Key,
-                    TotalWaste = g.Sum(f => f.TotalWaste)
-                })
-                .ToList();
-
-            var seriesList = new List<ISeries>();
-            foreach (var group in groupedData)
+            SeriesCollection = new[]
             {
-                var series = new ColumnSeries<double>
+                new ColumnSeries<double>
                 {
-                    Name = group.Category,
-                    Values = new double[] { group.TotalWaste },
-                    Fill = new SolidColorPaint(SKColors.Orange)
-                };
-                seriesList.Add(series);
-            }
-
-            // Set the SeriesCollection to the dynamically generated data
-            SeriesCollection = seriesList.ToArray();
-
-            // Set up the X and Y axes
-            XAxes = new Axis[]
-            {
-                new Axis
-                {
-                    Labels = groupedData.Select(g => g.Category).ToList(),
-                    LabelsRotation = 15
+                    Values = data.Select(d => d.TotalWaste).ToArray(),
+                    Name = "Waste"
                 }
             };
 
-            YAxes = new Axis[]
+            XAxes = new[]
             {
-                new Axis
-                {
-                    Labeler = value => $"{value:N0} Tons",
-                    MinLimit = 0
-                }
+                new Axis { Labels = data.Select(d => d.FoodCategory).ToArray() }
+            };
+
+            YAxes = new[]
+            {
+                new Axis { Labeler = value => $"{value:N0} Tons" }
             };
         }
     }

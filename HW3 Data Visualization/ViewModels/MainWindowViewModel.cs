@@ -13,14 +13,25 @@ namespace HW3_Data_Visualization.ViewModels
     {
         private readonly CsvService _csvService;
 
-        public ObservableCollection<object> Charts { get; } = new();
+        public ObservableCollection<ChartViewModelBase> Charts { get; } = new();
 
         public ObservableCollection<FoodWasteData> FoodWasteRecords { get; set; } = new();
+
+        public IRelayCommand<ChartViewModelBase> RemoveChartCommand { get; }
 
         public MainWindowViewModel()
         {
             _csvService = new CsvService();
             LoadCsvData();
+
+            // Initialize RemoveChartCommand to handle any ChartViewModelBase
+            RemoveChartCommand = new RelayCommand<ChartViewModelBase>(chart =>
+            {
+                if (chart != null)
+                {
+                    Charts.Remove(chart);
+                }
+            });
         }
 
         private void LoadCsvData()
@@ -66,7 +77,7 @@ namespace HW3_Data_Visualization.ViewModels
             });
         }
 
-         [RelayCommand]
+        [RelayCommand]
         private void ShowYearlyWasteTrend()
         {
             var yearlyData = FoodWasteRecords
@@ -81,11 +92,6 @@ namespace HW3_Data_Visualization.ViewModels
             {
                 RemoveChartCommand = RemoveChartCommand
             });
-        }
-        [RelayCommand]
-        private void RemoveChart(BarChartViewModel chart)
-        {
-            Charts.Remove(chart);
         }
     }
 }
