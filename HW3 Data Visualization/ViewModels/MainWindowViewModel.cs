@@ -13,7 +13,8 @@ namespace HW3_Data_Visualization.ViewModels
     {
         private readonly CsvService _csvService;
 
-        public ObservableCollection<BarChartViewModel> Charts { get; } = new();
+        public ObservableCollection<object> Charts { get; } = new();
+
         public ObservableCollection<FoodWasteData> FoodWasteRecords { get; set; } = new();
 
         public MainWindowViewModel()
@@ -57,6 +58,15 @@ namespace HW3_Data_Visualization.ViewModels
         }
 
         [RelayCommand]
+        private void ShowFoodWaste()
+        {
+            Charts.Add(new BarChartViewModel(FoodWasteRecords.ToList())
+            {
+                RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
+            });
+        }
+
+         [RelayCommand]
         private void ShowYearlyWasteTrend()
         {
             var yearlyData = FoodWasteRecords
@@ -67,18 +77,9 @@ namespace HW3_Data_Visualization.ViewModels
                     TotalWaste = g.Sum(f => f.TotalWaste)
                 })
                 .ToList();
-            Charts.Add(new BarChartViewModel(yearlyData)
+            Charts.Add(new LineChartViewModel(yearlyData) // Create Line Chart
             {
-                RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
-            });
-        }
-
-        [RelayCommand]
-        private void ShowFoodWaste()
-        {
-            Charts.Add(new BarChartViewModel(FoodWasteRecords.ToList())
-            {
-                RemoveChartCommand = RemoveChartCommand // Pass the command explicitly
+                RemoveChartCommand = RemoveChartCommand
             });
         }
         [RelayCommand]
